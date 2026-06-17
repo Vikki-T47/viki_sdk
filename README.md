@@ -17,14 +17,13 @@ V.I.K.I. (Vital Interface for Kinetic Integration) is a deterministic middleware
 
 ## 🚀 Quick Start
 
-### 1. Initialize V.I.K.I. (Model Agnostic)
+### 1. Initialize V.I.K.I.
 ```python
 from viki.core import VIKI_Middleware
 from viki.parsers.anthropic_parser import AnthropicIntentParser
 
-# Initialize with your preferred AI provider
-parser = AnthropicIntentParser(api_key="YOUR_ANTHROPIC_KEY")
-viki = VIKI_Middleware(intent_parser=parser, core_x_path="core_x.json")
+parser = AnthropicIntentParser(api_key="YOUR_KEY")
+viki = VIKI_Middleware(intent_parser=parser)
 2. Protect Your Functions
 code
 Python
@@ -32,9 +31,8 @@ from viki.decorators import enforce_boundary
 
 @enforce_boundary(viki_instance=viki)
 def transfer_funds(intent_text):
-    # This code only runs if V.I.K.I. authorizes the intent
     return "Transaction Successful"
-3. Framework Integration (LangChain)
+3. Framework Integration
 code
 Python
 from viki.integrations import VikiChainWrapper
