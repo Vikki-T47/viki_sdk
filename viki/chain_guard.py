@@ -15,7 +15,8 @@ class ChainGuard:
             return True, "No invariant set."
             
         if current_value != expected:
-            self.telemetry.log_interception("INVARIANT_VIOLATION", agent_intent)
-            return False, f"HALT: INVARIANT_VIOLATION. Semantic Drift Detected.\nExpected: {key}='{expected}'\nAgent Submitted: {key}='{current_value}'"
+            # ИСПРАВЛЕНО: используем log_incident вместо log_interception
+            self.telemetry.log_incident("CHAIN_GUARD", "INVARIANT_VIOLATION", agent_intent)
+            return False, f"HALT: INVARIANT_VIOLATION. Semantic Drift Detected.\\nExpected: {key}='{expected}'\\nAgent Submitted: {key}='{current_value}'"
             
         return True, f"[SYNCED] Invariant '{key}' matches."
