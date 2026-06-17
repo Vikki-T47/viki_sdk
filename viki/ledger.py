@@ -6,22 +6,15 @@ class TransactionLedger:
         self.history = []
 
     def commit_step(self, step_id, details, rollback_instruction):
-        self.history.append({
-            "step_id": step_id,
-            "details": details,
-            "rollback_instruction": rollback_instruction
-        })
-        print(f"   [{self.chain_name} LEDGER] Step '{step_id}' committed.")
+        self.history.append({"step_id": step_id, "details": details, "rollback_instruction": rollback_instruction})
+        print(f"📝 [{self.chain_name} LEDGER] Step '{step_id}' committed.")
 
     def trigger_graceful_shutdown(self, halt_reason):
-        if not self.history:
-            return None
+        if not self.history: # Исправлено: Возвращаем пустой план вместо None
+            return {"chain": self.chain_name, "actions_to_execute": [], "status": "CLEAN"}
             
-        print(f"   [{self.chain_name} VLR] Graceful Shutdown triggered. Reason: {halt_reason}")
-        rollback_plan = {"chain": self.chain_name, "actions_to_execute": []}
-        
+        print(f"🚨 [{self.chain_name} VLR] Graceful Shutdown triggered. Reason: {halt_reason}")
+        rollback_plan = {"chain": self.chain_name, "actions_to_execute": [], "status": "ROLLBACK_REQUIRED"}
         for entry in reversed(self.history):
             rollback_plan["actions_to_execute"].append(entry["rollback_instruction"])
-        
-        print(f"   [{self.chain_name} ROLLBACK INSTRUCTIONS] -> {json.dumps(rollback_plan)}")
         return rollback_plan
