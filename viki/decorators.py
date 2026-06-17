@@ -1,5 +1,4 @@
 import functools
-import logging
 
 def enforce_boundary(viki_instance):
     def decorator(func):
