@@ -1,28 +1,31 @@
 import json
+from datetime import datetime
 
 class VIKI_Telemetry:
-    def __init__(self):
-        self.stats = {
-            "total_blocks": 0, 
-            "tokens_saved": 0, 
-            "operator_time_saved_min": 0, 
-            "money_saved_usd": 0,
-            "auto_corrections": 0,
-            "atomic_failures_prevented": 0,
-            "predictive_savings_usd": 0  # НОВАЯ МЕТРИКА: Спасенные ДО траты деньги
-        }
+    _instance = None
+    def __new__(cls): 
+        if cls._instance is None:
+            cls._instance = super(VIKI_Telemetry, cls).__new__(cls)
+            cls._instance.stats = {
+                "total_blocks": 0, 
+                "tokens_saved": 0, 
+                "operator_time_saved_min": 0, 
+                "money_saved_usd": 0,
+                "incidents": [] 
+            }
+        return cls._instance
 
-    def log_interception(self, reason, agent_intent):
+    def log_incident(self, module, reason, details):
+        incident = {
+            "timestamp": datetime.now().isoformat(),
+            "module": module,
+            "reason": reason,
+            "agent_intent": details,
+            "status": "HALTED_BY_VIKI"
+        }
+        self.stats["incidents"].append(incident)
         self.stats["total_blocks"] += 1
         self.stats["tokens_saved"] += 1500
         self.stats["operator_time_saved_min"] += 30
-        self.stats["money_saved_usd"] += agent_intent.get("amount_usd", 0)
-        print(f"\n🛑 [V.I.K.I. AUDIT] Damage prevented: {reason}")
-
-    def log_predictive_block(self, saved_amount):
-        self.stats["predictive_savings_usd"] += saved_amount
-        self.stats["total_blocks"] += 1
-        print(f"\n🛡️ [V.I.K.I. PRA] PREDICTIVE BLOCK: Potential loss of ${saved_amount} neutralized before execution.")
-
-    def log_atomic_failure(self):
-        self.stats["atomic_failures_prevented"] += 1
+        self.stats["money_saved_usd"] += details.get("amount_usd", 0) if isinstance(details, dict) else 0
+        print(f"📄 [VCR] Incident logged: {reason}")
