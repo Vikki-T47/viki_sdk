@@ -1,5 +1,7 @@
 from .core import VIKI_Middleware
-from .telemetry import VIKI_Telemetry
+from .telemetry import VIKI_Telemetry, DeltaSensor
+from .sensors import RealityProbe
+from .decorators import enforce_boundary
 from .chain_guard import ChainGuard
 from .ledger import TransactionLedger
 from .recovery import RecoverySteering

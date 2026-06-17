@@ -2,7 +2,12 @@ import json
 import os
 import re
 import anthropic
+import datetime
+import logging
 from .telemetry import VIKI_Telemetry
+from .interrupt import RealityInterruptController
+
+logger = logging.getLogger(__name__)
 
 class VIKI_Middleware:
     def __init__(self, api_key, core_x_path="core_x.json"):
@@ -10,12 +15,13 @@ class VIKI_Middleware:
         self.core_x = self._load_core_x(core_x_path)
         self.limits = self.core_x.get("enterprise_src_limits", {})
         self.telemetry = VIKI_Telemetry()
+        self.interrupt_controller = RealityInterruptController()
 
     def _load_core_x(self, path):
         if os.path.exists(path):
             with open(path, "r", encoding="utf-8") as f:
                 try: return json.load(f)
-                except Exception as e: print(f"⚠️ [VIKI] Config Load Error: {e}")
+                except Exception as e: logger.error(f"Config Load Error: {e}")
         return {}
 
     def parse_agent_intent(self, raw_input):
@@ -26,19 +32,35 @@ class VIKI_Middleware:
             )
             match = re.search(r'\{.*\}', resp.content[0].text, re.DOTALL)
             if match: return json.loads(match.group())
-        except anthropic.APIError as e: print(f"⚠️ [VIKI] API Error: {e}")
-        except Exception as e: print(f"⚠️ [VIKI] Unexpected Error: {e}")
+        except Exception as e: logger.error(f"Parser Error: {e}")
         return {"action": "AMBIGUOUS", "amount_usd": 0, "target": "UNKNOWN"}
 
-    def authorize(self, intent_json, current_hour):
+    def authorize(self, intent_json, token_id=None):
         action = str(intent_json.get("action", "")).lower()
         amount = intent_json.get("amount_usd", 0)
-        
-        if "ambiguous" in action: return {"status": "RECALIBRATE", "reason": "Too many interpretations."}
-        
-        max_amount = self.limits.get("max_auto_transaction_usd", 0)
-        if amount > max_amount:
+        current_hour = datetime.datetime.now().hour
+
+        # 1. Проверка критических действий
+        critical_actions = self.limits.get("critical_actions_require_human", [])
+        if any(crit in action for crit in critical_actions):
+            self.telemetry.log_incident("SRC_GUARD", "CRITICAL_ACTION_HUMAN_REQUIRED", intent_json)
+            return {"status": "FRICTION", "reason": "Requires human authorization."}
+
+        # 2. Проверка времени (System Time)
+        allowed = self.limits.get("allowed_auto_execution_hours", {"start": 0, "end": 24})
+        if not (allowed["start"] <= current_hour < allowed["end"]):
+            return {"status": "BLOCKED", "reason": "Outside allowed hours."}
+
+        # 3. Проверка бюджета
+        if amount > self.limits.get("max_auto_transaction_usd", 0):
             self.telemetry.log_incident("SRC_GUARD", "BUDGET_EXCEEDED", intent_json)
             return {"status": "BLOCKED", "reason": f"Amount ${amount} exceeds limit."}
-            
+
+        # 4. Интеграция VRI (Проверка TTL токена)
+        if token_id:
+            is_valid, ttl_msg = self.interrupt_controller.verify_execution_gate(token_id)
+            if not is_valid:
+                self.telemetry.log_incident("VRI_INTERRUPT", ttl_msg, intent_json)
+                return {"status": "BLOCKED", "reason": ttl_msg}
+
         return {"status": "AUTHORIZED", "reason": "ALL_CHECKS_PASSED"}
