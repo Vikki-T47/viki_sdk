@@ -1,0 +1,7 @@
+{
+  "enterprise_src_limits": {
+    "max_auto_transaction_usd": 1000,
+    "allowed_auto_execution_hours": {"start": 9, "end": 18},
+    "critical_actions_require_human": ["delete_database", "mass_mailing"]
+  }
+}
