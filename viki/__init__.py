@@ -5,3 +5,4 @@ from .sensors import RealityProbe
 from .chain_guard import ChainGuard
 from .ledger import TransactionLedger
 from .recovery import RecoverySteering
+from .arbitrator import CrossChainArbitrator

@@ -1,33 +1,27 @@
 import json
 
 class TransactionLedger:
-    def __init__(self):
+    def __init__(self, chain_name="Default_Chain"):
+        self.chain_name = chain_name
         self.history = []
 
     def commit_step(self, step_id, details, rollback_instruction):
-        """Записывает успешный шаг и инструкцию по его отмене."""
         self.history.append({
             "step_id": step_id,
             "details": details,
             "rollback_instruction": rollback_instruction
         })
-        print(f"📝 [LEDGER] Step '{step_id}' committed. Rollback protocol saved.")
+        print(f"   [{self.chain_name} LEDGER] Step '{step_id}' committed.")
 
     def trigger_graceful_shutdown(self, halt_reason):
-        """Генерирует машиночитаемый JSON для отката системы (LIFO)."""
-        print(f"\n🚨 [VLR PROTOCOL INITIATED] Graceful Shutdown triggered.")
+        if not self.history:
+            return None
+            
+        print(f"   [{self.chain_name} VLR] Graceful Shutdown triggered. Reason: {halt_reason}")
+        rollback_plan = {"chain": self.chain_name, "actions_to_execute": []}
         
-        rollback_plan = {
-            "status": "ROLLBACK_REQUIRED",
-            "reason": halt_reason,
-            "actions_to_execute": []
-        }
-        
-        # Откат идет в обратном порядке (от последнего шага к первому)
         for entry in reversed(self.history):
             rollback_plan["actions_to_execute"].append(entry["rollback_instruction"])
         
-        print(">>> EXTERNAL API ROLLBACK INSTRUCTIONS GENERATED <<<")
-        print(json.dumps(rollback_plan, indent=2))
-        
+        print(f"   [{self.chain_name} ROLLBACK INSTRUCTIONS] -> {json.dumps(rollback_plan)}")
         return rollback_plan
