@@ -1,62 +1,45 @@
-# V.I.K.I. Core SDK
+# V.I.K.I. Core SDK v1.2.1
 ### Deterministic Behavioral Middleware for Agentic Workflows
 *Built on the Reality Synchronization Architecture (RSA) framework*
 
----
-
-## ⚠️ The Problem: The Alignment Delusion
-The AI industry is trapped in a false paradigm: attempting to secure probabilistic systems (LLMs) from the inside via weight alignment (RLHF) and system prompts. 
-
-This approach fails in **Agentic Workflows**. A language model inherently fears the "void" of missing data. When an autonomous agent lacks context, it does not stop — it generates predictive hallucinations to fulfill its "helpfulness" metric. In production, this results in:
-*   **Operational Damage:** Deleted databases or corrupted pipelines.
-*   **Financial Risk:** Unauthorized or misrouted transactions.
-*   **Cognitive Tax:** Forcing humans to act as manual filters for machine noise.
-
-> "A probabilistic process cannot regulate itself from within."
+V.I.K.I. (Vital Interface for Kinetic Integration) is a deterministic middleware layer that operates at the **Execution Boundary** — providing a reliable "braking system" for autonomous AI agents.
 
 ---
 
-## 🛡️ The Solution: The Execution Boundary
-V.I.K.I. (Vital Interface for Kinetic Integration) is a deterministic middleware layer. It operates strictly at the **Execution Boundary** — the space between the AI's probabilistic intent and the physical execution of a function.
-
-V.I.K.I. provides **Brake-as-a-Service**. It does not try to make the AI "smarter"; it makes the interaction structurally safe by intercepting intent and validating it against the **Specific Reality** of the enterprise.
+## 🛡️ Key Features
+*   **ISG (Intent Synchronization Gate):** Blocks execution upon semantic ambiguity.
+*   **SRC (Subject Reality Coefficient):** Validates intent against real-world limits (Time, Budget, Access).
+*   **VRS (Recovery & Steering):** Automated mid-flight error correction.
+*   **VCA (Cross-Chain Arbitrator):** Ensures atomic integrity across multi-agent tasks.
+*   **VCR (Compliance & Reporting):** Automated audit trails for legal transparency.
 
 ---
 
-## 🚀 Quick Start: Securing Your Agents
+## 🚀 Quick Start
 
-### 1. Define Reality Limits (`core_x.json`)
-```json
-{
-  "enterprise_src_limits": {
-    "max_auto_transaction_usd": 1000,
-    "critical_actions_require_human": ["delete_database"]
-  }
-}
-2. Option A: Simple Function Protection (Decorator)
+### 1. Initialize V.I.K.I. (Model Agnostic)
+```python
+from viki.core import VIKI_Middleware
+from viki.parsers.anthropic_parser import AnthropicIntentParser
+
+# Initialize with your preferred AI provider
+parser = AnthropicIntentParser(api_key="YOUR_ANTHROPIC_KEY")
+viki = VIKI_Middleware(intent_parser=parser, core_x_path="core_x.json")
+2. Protect Your Functions
 code
 Python
 from viki.decorators import enforce_boundary
 
-@enforce_boundary(api_key="YOUR_API_KEY", core_x_path="core_x.json")
-def execute_task(intent_text):
-    # Your agent logic here
-    return "Success"
-3. Option B: Framework Integration (LangChain Wrapper)
+@enforce_boundary(viki_instance=viki)
+def transfer_funds(intent_text):
+    # This code only runs if V.I.K.I. authorizes the intent
+    return "Transaction Successful"
+3. Framework Integration (LangChain)
 code
 Python
 from viki.integrations import VikiChainWrapper
-
-# Wrap your original agent
-viki_agent = VikiChainWrapper(original_langchain_agent, api_key="...")
-
-# V.I.K.I. now automatically handles Intent Sync, SRC, and DVP
-viki_agent.invoke("Transfer $500 to account X")
-4. Visual Verification (The Eye)
-code
-Python
-from viki.vision import VisualAudit
-
-eye = VisualAudit()
-# Verifies if the layout matches your technical blueprint
-is_valid, msg = eye.verify_layout("output.png", "Check for logo overlap.")
+viki_agent = VikiChainWrapper(original_agent, viki_instance=viki)
+🧠 Philosophy
+"A correct answer that is not synchronized with reality is not a result. It is an operational failure." — Gravity of Contact Manifesto.
+Architect: Viktor Trompak | Independent AI Behavioral Architect
+License: MIT
