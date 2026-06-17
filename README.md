@@ -25,7 +25,7 @@ V.I.K.I. provides **Brake-as-a-Service**. It does not try to make the AI "smarte
 
 ## 🚀 Quick Start: Securing Your Agents
 
-1. **Define Reality Limits (`core_x.json`)**
+### 1. Define Reality Limits (`core_x.json`)
 ```json
 {
   "enterprise_src_limits": {
@@ -33,24 +33,33 @@ V.I.K.I. provides **Brake-as-a-Service**. It does not try to make the AI "smarte
     "critical_actions_require_human": ["delete_database"]
   }
 }
-
-2.  Wrap Your Functions
-
+2. Option A: Simple Function Protection (Decorator)
+Use this for atomic tasks and legacy functions.
+code
+Python
 from viki.decorators import enforce_boundary
 
 @enforce_boundary(api_key="YOUR_API_KEY", core_x_path="core_x.json")
 def execute_task(intent_text):
     # Your agent logic here
     return "Success"
+3. Option B: Framework Integration (LangChain Wrapper)
+Secure your entire LangChain agent with a single line of code.
+code
+Python
+from viki.integrations import VikiChainWrapper
 
-🧠 Philosophy
+# Wrap your original LangChain agent
+viki_agent = VikiChainWrapper(original_langchain_agent, api_key="...")
 
-"A correct answer that is not synchronized with reality is not a result. It is
-an operational failure." — Gravity of Contact Manifesto.
+# V.I.K.I. now automatically handles Intent Sync, SRC, and DVP
+viki_agent.invoke("Transfer $500 to account X")
+4. Visual Verification (The Eye)
+Ensure visual integrity of the agent's output.
+code
+Python
+from viki.vision import VisualAudit
 
-AI safety is not about politeness. It is about the physical laws of interfaces.
-V.I.K.I. returns responsibility to where the mind resides: the human operator.
-
-Architect: Viktor Trompak | Independent AI Behavioral Architect
-License: Open Core / MIT
-
+eye = VisualAudit()
+# Verifies if the layout matches your technical blueprint
+is_valid, msg = eye.verify_layout("output.png", "Check for logo overlap.")
