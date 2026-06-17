@@ -34,7 +34,6 @@ V.I.K.I. provides **Brake-as-a-Service**. It does not try to make the AI "smarte
   }
 }
 2. Option A: Simple Function Protection (Decorator)
-Use this for atomic tasks and legacy functions.
 code
 Python
 from viki.decorators import enforce_boundary
@@ -44,18 +43,16 @@ def execute_task(intent_text):
     # Your agent logic here
     return "Success"
 3. Option B: Framework Integration (LangChain Wrapper)
-Secure your entire LangChain agent with a single line of code.
 code
 Python
 from viki.integrations import VikiChainWrapper
 
-# Wrap your original LangChain agent
+# Wrap your original agent
 viki_agent = VikiChainWrapper(original_langchain_agent, api_key="...")
 
 # V.I.K.I. now automatically handles Intent Sync, SRC, and DVP
 viki_agent.invoke("Transfer $500 to account X")
 4. Visual Verification (The Eye)
-Ensure visual integrity of the agent's output.
 code
 Python
 from viki.vision import VisualAudit
