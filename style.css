@@ -37,9 +37,10 @@ header {
 }
 
 .main-logo {
-    width: 120px; /* Умеренный размер */
+    width: 180px; /* Немного увеличил */
     height: auto;
-    opacity: 0.9;
+    opacity: 1;
+    border-radius: 50%; /* Если лого круглое, это поможет */
 }
 
 h1 {
@@ -71,22 +72,16 @@ h1 {
     font-weight: bold;
 }
 
-.manifesto-link:hover {
-    text-decoration: underline;
-}
+.manifesto-link:hover { text-decoration: underline; }
 
 .code-wrap {
-    background: #111;
+    background: #050505;
     padding: 15px;
-    border-radius: 4px;
     border: 1px solid var(--border);
-    overflow-x: auto;
+    margin-top: 15px;
 }
 
-code {
-    color: #00ff41;
-    font-size: 0.9rem;
-}
+code { color: var(--success); font-size: 0.9rem; }
 
 .spec-block {
     margin-bottom: 40px;
@@ -138,15 +133,21 @@ code {
 
 footer {
     margin-top: 80px;
-    font-size: 0.7rem;
-    color: #555;
+    font-size: 0.8rem;
+    color: #888;
     border-top: 1px solid var(--border);
     padding-top: 20px;
+    text-align: center;
 }
 
-footer a {
-    color: #888;
+/* Стиль для ссылки в футере */
+.footer-link {
+    color: var(--success);
     text-decoration: none;
+    border-bottom: 1px dashed var(--success);
 }
 
-footer a:hover { color: var(--success); }
+.footer-link:hover {
+    color: var(--accent);
+    border-bottom-style: solid;
+}
