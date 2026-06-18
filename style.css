@@ -1,0 +1,127 @@
+:root {
+    --bg: #0a0a0a;
+    --text: #d1d1d1;
+    --accent: #ffffff;
+    --border: #333;
+    --success: #00ff41; /* Terminal Green */
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+    padding: 40px 20px;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+}
+
+header {
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+}
+
+h1 {
+    font-size: 3rem;
+    margin: 0;
+    letter-spacing: -2px;
+}
+
+.subtitle {
+    color: var(--accent);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-bar {
+    font-size: 0.8rem;
+    color: var(--success);
+    background: #002b00;
+    display: inline-block;
+    padding: 2px 8px;
+    margin-top: 10px;
+}
+
+h2, h3 {
+    color: var(--accent);
+    text-transform: uppercase;
+}
+
+.spec-block {
+    margin-bottom: 40px;
+    padding: 20px;
+    border: 1px solid var(--border);
+}
+
+.evidence {
+    background-color: #111;
+    padding: 20px;
+    border: 1px solid var(--success);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.stat-item .label {
+    display: block;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.stat-item .value {
+    font-size: 1.1rem;
+    color: var(--success);
+    font-weight: bold;
+}
+
+.cta-block {
+    margin-top: 60px;
+    display: flex;
+    gap: 20px;
+}
+
+.btn {
+    text-decoration: none;
+    color: var(--bg);
+    background-color: var(--accent);
+    padding: 10px 20px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background-color: var(--success);
+}
+
+.btn.secondary {
+    background-color: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+}
+
+.btn.secondary:hover {
+    border-color: var(--success);
+    color: var(--success);
+}
+
+footer {
+    margin-top: 80px;
+    font-size: 0.7rem;
+    color: #555;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+}
