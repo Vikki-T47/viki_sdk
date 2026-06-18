@@ -1,70 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V.I.K.I. | Technical Specification</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>V.I.K.I. — Vital Interface for Kinetic Integration</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
 </head>
 <body>
     <div class="container">
+
+        <!-- HEADER -->
         <header>
-            <div class="logo-area">
-                <!-- Прямая ссылка на файл в корне -->
-                <img src="logo.png" alt="V.I.K.I. RSA Pattern" class="main-logo">
-            </div>
-            <div class="header-text">
-                <h1>V.I.K.I.</h1>
-                <p class="tagline">VITAL INTERFACE FOR KINETIC INTEGRATION</p>
-                <div class="status-badge">SYSTEM_STATUS: [STABLE] | VER: 1.2.1 PLATINUM</div>
-            </div>
+            <img src="https://raw.githubusercontent.com/Vikki-T47/viki_sdk/main/docs/logo.svg" alt="V.I.K.I. Logo" class="main-logo" onerror="this.style.display='none'" />
+            <h1>V.I.K.I.</h1>
+            <p class="tagline">VITAL INTERFACE FOR KINETIC INTEGRATION</p>
+            <div class="status-badge">SYSTEM_STATUS: [STABLE] — VER: 1.2.1 PLATINUM</div>
         </header>
 
-        <section class="module-block">
+        <!-- MODULE 1: THE PROBLEM -->
+        <div class="module-block">
             <div class="module-header">MODULE_01: THE_PROBLEM</div>
             <div class="module-content">
-                <p>Probabilistic models (LLMs) are blind to the physical and financial limits of your enterprise. Without a deterministic brake, autonomous agents inevitably hallucinate actions, leading to "Interaction Hallucinations," corrupted data, and direct financial loss. Internal alignment (RLHF) is a stylistic choice; <strong>V.I.K.I. is an operational law.</strong></p>
+                <p>Probabilistic models (LLMs) are blind to the physical and financial limits of your enterprise. Without a deterministic brake, autonomous agents inevitably hallucinate actions, leading to "Interaction Hallucinations," corrupted data, and direct financial loss.</p>
+                <p>Internal alignment (RLHF) is a stylistic choice; V.I.K.I. is an operational law.</p>
             </div>
-        </section>
+        </div>
 
-        <section class="module-block">
+        <!-- MODULE 2: RSA FRAMEWORK -->
+        <div class="module-block">
             <div class="module-header">MODULE_02: RSA_FRAMEWORK</div>
             <div class="module-content">
-                <p>We implement the Reality Synchronization Architecture (RSA). V.I.K.I. acts as an algorithmic "Prefrontal Cortex" at the Execution Boundary, intercepting agent intent before it interacts with your infrastructure.</p>
-                <a href="https://leanpub.com/gravity-of-contact" target="_blank" class="action-link">> ACCESS_MANIFESTO</a>
+                <p>We implement the <strong>Reality Synchronization Architecture (RSA)</strong>. V.I.K.I. acts as an algorithmic "Prefrontal Cortex" at the <strong>Execution Boundary</strong>, intercepting agent intent before it interacts with your infrastructure.</p>
+                <p><a href="https://leanpub.com/gravity-of-contact" class="action-link" target="_blank">📖 Read the full Manifesto →</a></p>
             </div>
-        </section>
+        </div>
 
-        <section class="module-block code-module">
+        <!-- MODULE 3: IMPLEMENTATION -->
+        <div class="module-block">
             <div class="module-header">MODULE_03: IMPLEMENTATION</div>
             <div class="module-content">
-<pre><code>@enforce_boundary(viki_instance=viki)
+                <div class="code-module">
+                    <pre>from viki.decorators import enforce_boundary
+
+@enforce_boundary(viki_instance=viki)
 def transfer_funds(intent_text):
     # Physically protected from drift
-    return "Authorized_Execution"</code></pre>
+    return "Authorized_Execution"</pre>
+                </div>
+                <p style="margin-top:15px;">One decorator. Full protection. Zero operational risk.</p>
             </div>
-        </section>
+        </div>
 
-        <section class="module-block report-module">
+        <!-- MODULE 4: INDUSTRIAL AUDIT REPORT -->
+        <div class="module-block report-module">
             <div class="module-header">MODULE_04: INDUSTRIAL_AUDIT_REPORT</div>
             <div class="report-grid">
-                <div class="report-item"><span>SECURITY:</span> 100% OWASP ASI</div>
-                <div class="report-item"><span>STABILITY:</span> 100% DRIFT_PROTECTION</div>
-                <div class="report-item"><span>LATENCY:</span> &lt; 0.01ms</div>
-                <div class="report-item"><span>ROI:</span> $50,000+ SAVED</div>
+                <div class="report-item">SECURITY: <span>100%</span> OWASP ASI</div>
+                <div class="report-item">STABILITY: <span>100%</span> DRIFT_PROTECTION</div>
+                <div class="report-item">LATENCY: <span>&lt; 0.01ms</span></div>
+                <div class="report-item">ROI: <span>$50,000+</span> SAVED</div>
             </div>
-        </section>
+        </div>
 
-        <footer class="footer-controls">
+        <!-- FOOTER / CALL TO ACTION -->
+        <div class="footer-controls">
             <div class="button-group">
-                <a href="https://github.com/Vikki-T47/viki_sdk" class="viki-btn main-btn">GET_SDK_GITHUB</a>
-                <!-- ТЕПЕРЬ КНОПКА АКТИВНА -->
-                <a href="https://www.linkedin.com/in/vikki-trompak-4213693a0/" target="_blank" class="viki-btn alt-btn">REQUEST_AUDIT</a>
+                <a href="https://github.com/Vikki-T47/viki_sdk" class="viki-btn main-btn" target="_blank">GitHub Repository</a>
+                <a href="https://leanpub.com/gravity-of-contact" class="viki-btn alt-btn" target="_blank">Read the Manifesto</a>
             </div>
             <div class="signature">
-                ARCHITECT: <a href="https://www.linkedin.com/in/vikki-trompak-4213693a0/" target="_blank">VIKKI TROMPAK</a> | (c) 2026 RSA_CORE
+                <p>Architect: <a href="https://linkedin.com/in/vikki-trompak-4213693a0" target="_blank">Viktor Trompak</a> · Independent AI Behavioral Architect</p>
+                <p><a href="mailto:vrachx777@gmail.com">vrachx777@gmail.com</a></p>
+                <p style="margin-top:15px; color:#333;">&copy; 2026 · RSA · V.I.K.I. Core SDK</p>
             </div>
-        </footer>
+        </div>
+
     </div>
 </body>
 </html>
