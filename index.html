@@ -1,81 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>V.I.K.I. — Vital Interface for Kinetic Integration</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V.I.K.I. | The Execution Boundary</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
+    <div class="glow-bg"></div>
+    
+    <nav class="navbar">
+        <div class="nav-content">
+            <span class="brand">V.I.K.I. // RSA_CORE</span>
+            <span class="ver">v1.2.1 PLATINUM</span>
+        </div>
+    </nav>
 
-        <!-- HEADER -->
-        <header>
-            <img src="https://raw.githubusercontent.com/Vikki-T47/viki_sdk/main/docs/logo.svg" alt="V.I.K.I. Logo" class="main-logo" onerror="this.style.display='none'" />
-            <h1>V.I.K.I.</h1>
-            <p class="tagline">VITAL INTERFACE FOR KINETIC INTEGRATION</p>
-            <div class="status-badge">SYSTEM_STATUS: [STABLE] — VER: 1.2.1 PLATINUM</div>
-        </header>
-
-        <!-- MODULE 1: THE PROBLEM -->
-        <div class="module-block">
-            <div class="module-header">MODULE_01: THE_PROBLEM</div>
-            <div class="module-content">
-                <p>Probabilistic models (LLMs) are blind to the physical and financial limits of your enterprise. Without a deterministic brake, autonomous agents inevitably hallucinate actions, leading to "Interaction Hallucinations," corrupted data, and direct financial loss.</p>
-                <p>Internal alignment (RLHF) is a stylistic choice; V.I.K.I. is an operational law.</p>
+    <main class="container">
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="sphere-wrap">
+                <img src="logo.png" alt="VIKI Sphere" class="hero-sphere">
             </div>
+            <p class="hero-tagline">DETERMINISTIC SAFETY FOR PROBABILISTIC SYSTEMS</p>
+            <h1>The Execution Boundary</h1>
+            <div class="hero-actions">
+                <a href="https://github.com/Vikki-T47/viki_sdk" class="btn primary">GET_SDK_ON_GITHUB</a>
+                <a href="https://www.linkedin.com/in/vikki-trompak-4213693a0/" target="_blank" class="btn secondary">REQUEST_AUDIT</a>
+            </div>
+        </section>
+
+        <!-- STATS / AUDIT -->
+        <section class="stats-panel">
+            <div class="stat-card">
+                <div class="stat-val">100%</div>
+                <div class="stat-lab">OWASP ASI COMPLIANCE</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val">0.007ms</div>
+                <div class="stat-lab">DECISION LATENCY</div>
+            </div>
+            <div class="stat-card highlight">
+                <div class="stat-val">$50K+</div>
+                <div class="stat-lab">PREVENTED DAMAGE</div>
+            </div>
+        </section>
+
+        <!-- PROBLEM & SOLUTION -->
+        <div class="grid-layout">
+            <section class="info-card">
+                <h3>[01] THE PROBLEM</h3>
+                <p>LLMs are blind to the physical and financial limits of your enterprise. Without a deterministic brake, agents hallucinate actions, leading to data corruption and financial loss.</p>
+            </section>
+            <section class="info-card">
+                <h3>[02] THE RSA SOLUTION</h3>
+                <p>Reality Synchronization Architecture (RSA) acts as an algorithmic "Prefrontal Cortex", intercepting intent before it hits your infrastructure.</p>
+                <a href="https://leanpub.com/gravity-of-contact" target="_blank" class="text-link">> Read Manifesto</a>
+            </section>
         </div>
 
-        <!-- MODULE 2: RSA FRAMEWORK -->
-        <div class="module-block">
-            <div class="module-header">MODULE_02: RSA_FRAMEWORK</div>
-            <div class="module-content">
-                <p>We implement the <strong>Reality Synchronization Architecture (RSA)</strong>. V.I.K.I. acts as an algorithmic "Prefrontal Cortex" at the <strong>Execution Boundary</strong>, intercepting agent intent before it interacts with your infrastructure.</p>
-                <p><a href="https://leanpub.com/gravity-of-contact" class="action-link" target="_blank">📖 Read the full Manifesto →</a></p>
+        <!-- CODE TERMINAL -->
+        <section class="terminal-window">
+            <div class="terminal-header">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                <span class="terminal-title">viki_integration.py</span>
             </div>
+            <div class="terminal-body">
+<pre><code><span class="keyword">@enforce_boundary</span>(viki_instance=viki)
+<span class="function">def</span> <span class="title">execute_transaction</span>(intent):
+    <span class="comment"># Protected by Deterministic Law</span>
+    <span class="keyword">return</span> <span class="string">"Success_Authorized"</span></code></pre>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>Architect: <a href="https://www.linkedin.com/in/vikki-trompak-4213693a0/" target="_blank">Viktor Trompak</a></p>
+            <p class="legal">(c) 2026 RSA FRAMEWORK. Deterministic Execution Guaranteed.</p>
         </div>
-
-        <!-- MODULE 3: IMPLEMENTATION -->
-        <div class="module-block">
-            <div class="module-header">MODULE_03: IMPLEMENTATION</div>
-            <div class="module-content">
-                <div class="code-module">
-                    <pre>from viki.decorators import enforce_boundary
-
-@enforce_boundary(viki_instance=viki)
-def transfer_funds(intent_text):
-    # Physically protected from drift
-    return "Authorized_Execution"</pre>
-                </div>
-                <p style="margin-top:15px;">One decorator. Full protection. Zero operational risk.</p>
-            </div>
-        </div>
-
-        <!-- MODULE 4: INDUSTRIAL AUDIT REPORT -->
-        <div class="module-block report-module">
-            <div class="module-header">MODULE_04: INDUSTRIAL_AUDIT_REPORT</div>
-            <div class="report-grid">
-                <div class="report-item">SECURITY: <span>100%</span> OWASP ASI</div>
-                <div class="report-item">STABILITY: <span>100%</span> DRIFT_PROTECTION</div>
-                <div class="report-item">LATENCY: <span>&lt; 0.01ms</span></div>
-                <div class="report-item">ROI: <span>$50,000+</span> SAVED</div>
-            </div>
-        </div>
-
-        <!-- FOOTER / CALL TO ACTION -->
-        <div class="footer-controls">
-            <div class="button-group">
-                <a href="https://github.com/Vikki-T47/viki_sdk" class="viki-btn main-btn" target="_blank">GitHub Repository</a>
-                <a href="https://leanpub.com/gravity-of-contact" class="viki-btn alt-btn" target="_blank">Read the Manifesto</a>
-            </div>
-            <div class="signature">
-                <p>Architect: <a href="https://linkedin.com/in/vikki-trompak-4213693a0" target="_blank">Viktor Trompak</a> · Independent AI Behavioral Architect</p>
-                <p><a href="mailto:vrachx777@gmail.com">vrachx777@gmail.com</a></p>
-                <p style="margin-top:15px; color:#333;">&copy; 2026 · RSA · V.I.K.I. Core SDK</p>
-            </div>
-        </div>
-
-    </div>
+    </footer>
 </body>
 </html>
