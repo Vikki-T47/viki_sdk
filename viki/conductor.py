@@ -1,5 +1,4 @@
 import logging
-import json
 from .navigator import VikiNavigator
 
 logger = logging.getLogger(__name__)
@@ -11,48 +10,37 @@ class VikiGraphController:
 
     def execute_chain(self, task_id, steps_list, initial_state):
         saved = self.navigator.load_state(task_id)
-        
-        if saved:
-            current_step_idx = saved["current_step"]
-            state = saved["state_data"]
-            last_status = saved["status"]
-            
-            # НОВОЕ: Профессиональное логирование возобновления
-            if last_status == "PAUSE_FOR_SYNC":
-                print(f"🔄 [CONDUCTOR] Resuming from PAUSE at step {current_step_idx}")
-            else:
-                print(f"🔄 [CONDUCTOR] Resuming Task {task_id} from Step {current_step_idx}")
-        else:
-            current_step_idx = 0
-            state = initial_state
-            last_status = "START"
-
+        current_step_idx = saved["current_step"] if saved else 0
+        state = saved["state_data"] if saved else initial_state
         total = len(steps_list)
 
         for i in range(current_step_idx, total):
             current_task = steps_list[i]
-            task_name = current_task.__name__.lower()
+            service_name = current_task.__name__
 
-            if last_status == "PAUSE_FOR_SYNC" and i == current_step_idx:
-                print(f"👤 [CONDUCTOR] Step {i} ({task_name}) AUTHORIZED BY HUMAN. Proceeding...")
-                last_status = "ACTIVE"
-            else:
-                intent = {"action": task_name, "amount_usd": state.get("budget", 0)}
-                auth = self.viki.authorize(intent)
+            # 1. Проверка Circuit Breaker
+            if not self.viki.breaker.can_execute(service_name):
+                return {"status": "HALTED", "reason": f"CIRCUIT_OPEN for {service_name}"}
 
-                if auth["status"] == "FRICTION":
-                    self.navigator.save_checkpoint(task_id, i, total, state, "PAUSE_FOR_SYNC")
-                    print(f"⏸️ [CONDUCTOR] Step {i} ({task_name}) -> PAUSED. Awaiting Sync.")
-                    return {"status": "PAUSED", "step": i}
+            # 2. Sentinel Authorization
+            intent = {"action": service_name, "amount_usd": state.get("budget", 0)}
+            auth = self.viki.authorize(intent)
 
-                if auth["status"] == "BLOCKED":
-                    self.navigator.save_checkpoint(task_id, i, total, state, "HALTED")
-                    print(f"🛑 [CONDUCTOR] Step {i} ({task_name}) -> HALTED: {auth['reason']}")
-                    return {"status": "HALTED", "reason": auth["reason"]}
+            # Трассировка в Черный Ящик
+            self.navigator.log_trace(task_id, i, f"Executing {service_name}", auth["status"])
 
-            print(f"⚙️ [CONDUCTOR] Executing: {task_name}...")
-            state = current_task(state)
-            self.navigator.save_checkpoint(task_id, i + 1, total, state, "ACTIVE")
+            if auth["status"] != "AUTHORIZED":
+                self.navigator.save_checkpoint(task_id, i, total, state, auth["status"])
+                return {"status": auth["status"], "step": i}
+
+            # 3. Выполнение с обработкой ошибок для Breaker
+            try:
+                state = current_task(state)
+                self.viki.breaker.report_success(service_name)
+                self.navigator.save_checkpoint(task_id, i + 1, total, state, "ACTIVE")
+            except Exception as e:
+                self.viki.breaker.report_failure(service_name)
+                self.navigator.save_checkpoint(task_id, i, total, state, "ERROR")
+                return {"status": "ERROR", "reason": str(e)}
             
-        print(f"🏁 [CONDUCTOR] Task {task_id} COMPLETED.")
         return {"status": "COMPLETED", "final_state": state}
