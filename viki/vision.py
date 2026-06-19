@@ -1,19 +1,29 @@
+import logging
 from .telemetry import VIKI_Telemetry
 
+logger = logging.getLogger(__name__)
+
 class VisualAudit:
-    """Верификация реальности через Vision-модели (Claude 3.5 Sonnet)."""
+    """Расширенный визуальный сенсор RSA."""
     def __init__(self):
         self.telemetry = VIKI_Telemetry()
 
-    def verify_layout(self, image_path, blueprint_description):
-        print(f"🔍 [V.I.K.I. EYE] Analysing visual output: {image_path}")
-        print(f"🎯 [V.I.K.I. EYE] Comparing against blueprint: '{blueprint_description}'")
+    def verify_reality(self, source, mode="UI_AUDIT", blueprint=None):
+        """
+        Верификация визуального слоя.
+        mode: UI_AUDIT (интерфейсы), DOC_VERIFY (документы), OBJECT_SCAN (физические объекты)
+        """
+        logger.info(f"🔍 [EYE] Mode: {mode} | Source: {source}")
+        
+        # Имитация работы мультимодальной модели (Claude 3.5 / GPT-4o Vision)
+        if mode == "UI_AUDIT" and blueprint:
+            if "overlap" in blueprint.lower():
+                self.telemetry.log_incident("VISION_EYE", "UI_LAYOUT_CORRUPTED", {"source": source})
+                return False, "HALT: Interface elements overlapping. Interaction impossible."
+        
+        if mode == "DOC_VERIFY":
+            if "signature" in blueprint.lower():
+                # Симуляция: ИИ утверждает, что подписал, но Глаз не видит подписи
+                return False, "HALT: Document integrity violation. Required signature missing."
 
-        # Имитация: если в чертеже есть слово 'overlap', значит верстка сломана
-        is_layout_broken = "overlap" in blueprint_description.lower()
-
-        if is_layout_broken:
-            self.telemetry.log_incident("VISION_EYE", "VISUAL_DISCREPANCY", {"issue": "Logo overlaps text"})
-            return False, "HALT: Visual layout integrity violated. Logo overlaps content."
-
-        return True, "SYNCED: Visual check passed."
+        return True, "SYNCED: Visual reality matches intent."
