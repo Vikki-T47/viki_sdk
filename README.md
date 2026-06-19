@@ -21,7 +21,7 @@ V.I.K.I. (Vital Interface for Kinetic Integration) is a deterministic middleware
 *   **VCA (Cross-Chain Arbitrator):** Ensures atomic integrity across multi-agent tasks.
 *   **VCR (Compliance & Reporting):** Automated audit trails for legal transparency.
 *   **The Eye:** Physical verification of visual results via Vision LLMs.
-
+*   **Active Environment Probing:** Real-time synchronization with financial, temporal, and visual data sources.
 ---
 
 ## 🔥 Proven Performance: Stress-Test Results

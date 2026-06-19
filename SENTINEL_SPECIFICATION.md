@@ -31,13 +31,10 @@ V.I.K.I. Sentinel manages the agent lifecycle through deterministic filters:
 
 3.1. Sensing Reality Echelon
 
-  - SRC Mapping (Subject Reality Coefficient): Mandatory validation of AI intent
-    against physical limits (budget, time, access) prior to generation.
-  - SBI Sensor (Semantic Breadth Index): Ambiguity blocker. If intent is
-    unclear, the system forfeits the right to action, retaining only the right
-    to a question (MCI).
+  - SRC Mapping (Subject Reality Coefficient): Mandatory validation of AI intent against physical limits (budget, time, access) prior to generation.
+  - SBI Sensor (Semantic Breadth Index): Ambiguity blocker. If intent is unclear, the system forfeits the right to action.
   - The Eye (Visual Audit): Physical verification of results via Vision models.
-    If layout integrity is violated, the chain is severed.
+  - Active Environment Probing: Real-time synchronization with financial, temporal, and visual data sources (Live Market Rates, API Quotas, Calendar Collision). [NEW in v1.3]
 
 3.2. Action Control Echelon
 
