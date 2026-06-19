@@ -12,3 +12,8 @@ from .integrations import VikiChainWrapper
 from .vision import VisualAudit
 from .navigator import VikiNavigator
 from .conductor import VikiGraphController
+from .core import VIKI_Middleware
+from .telemetry import VIKI_Telemetry, DeltaSensor
+from .navigator import VikiNavigator
+from .breaker import CircuitBreaker # НОВОЕ
+from .compliance import ComplianceOfficer
