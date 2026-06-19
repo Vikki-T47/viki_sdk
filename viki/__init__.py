@@ -10,3 +10,5 @@ from .interrupt import RealityInterruptController
 from .compliance import ComplianceOfficer
 from .integrations import VikiChainWrapper
 from .vision import VisualAudit
+from .navigator import VikiNavigator
+from .conductor import VikiGraphController

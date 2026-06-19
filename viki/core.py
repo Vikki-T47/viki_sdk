@@ -32,16 +32,29 @@ class VIKI_Middleware:
         return self.intent_parser.parse(raw_input)
 
     def authorize(self, intent_json, token_id=None):
-        # ... (предыдущие проверки: бюджет, критические действия) ...
-        
-        # НОВОЕ: Сверка с живым контекстом
-        from .sensors import RealityProbe
-        probe = RealityProbe()
-        
-        # Если агент хочет сделку - проверяем квоту API
-        is_quota_ok, quota_msg = probe.check_api_quota("BANK_GATEWAY")
-        if not is_quota_ok:
-            self.telemetry.log_incident("SRC_GUARD", "QUOTA_EXHAUSTED", intent_json)
-            return {"status": "BLOCKED", "reason": quota_msg}
-            
-        return {"status": "AUTHORIZED", "reason": "REALITY_SYNC_COMPLETE"}
+        action = str(intent_json.get("action", "")).lower()
+        amount = intent_json.get("amount_usd", 0)
+        current_hour = datetime.datetime.now().hour
+
+        # 1. Проверка критических действий (Режим FRICTION)
+        critical = self.limits.get("critical_actions_require_human", [])
+        if any(crit.lower() in action for crit in critical):
+            self.telemetry.log_incident("SRC_GUARD", "FRICTION_HUMAN_REQUIRED", intent_json)
+            return {"status": "FRICTION", "reason": "Requires human authorization."}
+
+        # 2. Проверка рабочего времени (SRC)
+        allowed = self.limits.get("allowed_auto_execution_hours", {"start": 0, "end": 24})
+        if not (allowed["start"] <= current_hour < allowed["end"]):
+            return {"status": "BLOCKED", "reason": "Outside allowed hours."}
+
+        # 3. Бюджет
+        max_amount = self.limits.get("max_auto_transaction_usd", 0)
+        if amount > max_amount:
+            return {"status": "BLOCKED", "reason": f"Amount ${amount} exceeds limit."}
+
+        # 4. TTL токен (VRI)
+        if token_id:
+            is_valid, msg = self.interrupt_controller.verify_execution_gate(token_id)
+            if not is_valid: return {"status": "BLOCKED", "reason": msg}
+
+        return {"status": "AUTHORIZED", "reason": "ALL_CHECKS_PASSED"}
