@@ -63,6 +63,7 @@ Phase 3 (B2C / Human): Deployment of the SEI (Subject Entropy Index) module to p
 [06] ECONOMIC EFFICIENCY OF DETERMINISM (EED)
 6.1. The Operational Cost of Failure
 In agentic workflows, the cost of failure includes remediation, reputational damage, and operational overhead. Our stress-test simulations demonstrate that a vanilla agent in a 10-step chain has a cascade failure rate of 80–86%, meaning the probability of completing a multi-step task without critical error is only 14–20%.
+
 6.2. The EED Formula
 We propose a model for calculating prevented damage and ROI:
 Total Savings = (N * P * C) - V_cost
@@ -70,8 +71,10 @@ N: Number of transactions (agentic workflows) per year.
 P: Probability of a critical hallucination (conservatively estimated at 15% for enterprise workflows).
 C: Average cost of a single operational error (rollback, fines, customer churn).
 V_cost: Total cost of V.I.K.I. deployment and compute.
+
 6.3. Financial Validation
 In a controlled simulation of 1,000 financial transactions, V.I.K.I. Sentinel intercepted 15 potentially damaging actions, preventing over $50,000 in operational losses. This was achieved with a decision latency of < 0.007 ms, making the safety layer effectively invisible to the agent's execution speed.
+
 6.4. Resource Efficiency: V.I.K.I. vs. "Warden" Models
 Unlike "Warden" models (secondary LLMs that monitor primary agents), V.I.K.I. uses deterministic filters at the Execution Boundary. This architecture is 5x more resource-efficient than monitoring approaches that rely on constant LLM inference, providing deterministic reliability at a fraction of the compute cost.
 
