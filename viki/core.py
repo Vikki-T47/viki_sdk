@@ -1,22 +1,37 @@
 import json
 import os
 import datetime
-import re
 import logging
+import re
 from .telemetry import VIKI_Telemetry
 from .interrupt import RealityInterruptController
 from .breaker import CircuitBreaker
+from .parsers.anthropic_parser import AnthropicIntentParser
+from .parsers.local_parser import LocalIntentParser
 
 logger = logging.getLogger(__name__)
 
 class VIKI_Middleware:
-    def __init__(self, intent_parser, core_x_path="core_x.json"):
-        self.intent_parser = intent_parser
+    def __init__(self, intent_parser=None, core_x_path="core_x.json"):
         self.core_x = self._load_core_x(core_x_path)
         self.limits = self.core_x.get("enterprise_src_limits", {})
+        
+        # АВТО-ВЫБОР ПРОВАЙДЕРА (Задача 1)
+        if intent_parser:
+            self.intent_parser = intent_parser
+        else:
+            provider = self.limits.get("provider", "anthropic").lower()
+            api_key = os.getenv("ANTHROPIC_API_KEY", "STABLE_TEST")
+            
+            if provider == "local":
+                self.intent_parser = LocalIntentParser()
+                logger.info("📡 [CORE] Initialized with LOCAL provider (Ollama/vLLM)")
+            else:
+                self.intent_parser = AnthropicIntentParser(api_key=api_key)
+                logger.info("📡 [CORE] Initialized with ANTHROPIC provider")
+
         self.telemetry = VIKI_Telemetry()
         self.interrupt_controller = RealityInterruptController()
-        # ИСПРАВЛЕНО: Предохранитель теперь на месте
         self.breaker = CircuitBreaker()
 
     def _load_core_x(self, path):
@@ -30,42 +45,15 @@ class VIKI_Middleware:
         self.telemetry.calculate_sei(raw_input)
         return self.intent_parser.parse(raw_input)
 
-    def apply_breath_test(self, raw_response):
-        """
-        Физика со-регуляции. Сжимает ответ ИИ при высоком SEI.
-        """
-        sei = self.telemetry.stats["sei_current"]
-        
-        if sei >= 0.7:
-            # 1. Удаляем все вопросы (Zero-Question Policy)
-            clean_text = re.sub(r'\?+', '.', raw_response)
-            
-            # 2. ИСПРАВЛЕНО: Умное сжатие (по точкам или по длине)
-            sentences = [s.strip() for s in clean_text.split('.') if s.strip()]
-            
-            if len(sentences) >= 2:
-                final_text = ". ".join(sentences[:2]) + "."
-            elif len(clean_text) > 100:
-                final_text = clean_text[:100].strip() + "..."
-            else:
-                final_text = clean_text
-                
-            final_text += "\n\n[RSA: System in PRESENCE mode. Space opened.]"
-            return final_text
-        
-        return raw_response
-
     def authorize(self, intent_json, token_id=None):
         action = str(intent_json.get("action", "")).lower()
-        
-        # ИСПРАВЛЕНО: Теперь Breaker реально проверяет возможность действия
-        if not self.breaker.can_execute(action):
-            return {"status": "BLOCKED", "reason": "CIRCUIT_OPEN: Target service isolated."}
-            
         amount = intent_json.get("amount_usd", 0)
-        max_auto = self.limits.get("max_auto_transaction_usd", 1000)
         
+        if not self.breaker.can_execute(action):
+            return {"status": "BLOCKED", "reason": "CIRCUIT_OPEN"}
+            
+        max_auto = self.limits.get("max_auto_transaction_usd", 1000)
         if amount > max_auto:
-            return {"status": "FRICTION", "reason": "High weight transaction."}
+            return {"status": "FRICTION", "reason": "Limit exceeded"}
             
         return {"status": "AUTHORIZED", "reason": "OK"}

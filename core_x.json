@@ -1,13 +1,8 @@
 {
   "enterprise_src_limits": {
+    "provider": "anthropic",
     "max_auto_transaction_usd": 1000,
-    "allowed_auto_execution_hours": {
-      "start": 9, 
-      "end": 21
-    },
-    "critical_actions_require_human": [
-      "mass_mailing", 
-      "delete_database"
-    ]
+    "allowed_auto_execution_hours": {"start": 9, "end": 21},
+    "critical_actions_require_human": ["mass_mailing", "delete_database"]
   }
 }
