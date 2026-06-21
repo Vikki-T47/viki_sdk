@@ -8,3 +8,5 @@
 
 **Total Incidents Cataloged:** 2
 **Last Sync:** 2026-06-21 19:15:23
+
+Note: Latency benchmarks measured in a local air-gapped environment (Ollama/Llama3). Production network latency may vary.
