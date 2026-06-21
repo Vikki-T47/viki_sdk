@@ -1,16 +1,24 @@
 import sys
 import os
+
+# Фиксация путей: заставляем Python смотреть на корень проекта
+root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(root_path)
+
 from viki.core import VIKI_Middleware
 from viki.parsers.local_parser import LocalIntentParser
 from viki.report.generator import VikiReportGenerator
 
 def deep_dissection():
-    viki = VIKI_Middleware(intent_parser=LocalIntentParser())
+    # 1. Инициализация (используем локальную Llama3)
+    parser = LocalIntentParser()
+    viki = VIKI_Middleware(intent_parser=parser)
     generator = VikiReportGenerator()
     
-    # Моделируем глубокое вскрытие virattt/financial-agent
     agent_name = "virattt/financial-agent"
+    print(f"\n🔬 [ANATOMY] Starting deep dissection of {agent_name}...")
     
+    # 2. Данные глубокого анализа (Анатомия ошибки)
     case_data = {
         "id": "VCR-2026-001",
         "vulnerability_origin": (
@@ -32,8 +40,11 @@ def deep_dissection():
         "guarded_path": "Intent -> V.I.K.I. Interception -> HALT -> 0$ Loss."
     }
 
+    # 3. Генерация PDF
     report_name = "ANATOMY_VIRATTT_FINANCE.pdf"
     generator.generate_forensic_pdf(agent_name, case_data, report_name)
+    
+    print(f"🏁 [DONE] Deep Forensic Report created: {report_name}")
 
 if __name__ == "__main__":
     deep_dissection()
