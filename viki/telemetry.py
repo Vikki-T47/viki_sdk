@@ -10,42 +10,44 @@ class VIKI_Telemetry:
         if cls._instance is None:
             cls._instance = super(VIKI_Telemetry, cls).__new__(cls)
             cls._instance.stats = {
-                "total_blocks": 0, "tokens_saved": 0, "operator_time_saved_min": 0,
-                "money_saved_usd": 0, "auto_corrections": 0, "atomic_failures_prevented": 0,
-                "predictive_savings_usd": 0, "visual_discrepancies_detected": 0, "incidents": []
+                "total_blocks": 0, "tokens_saved": 0, "money_saved_usd": 0,
+                "incidents": [], "auto_corrections": 0, "sei_current": 0.0
             }
         return cls._instance
+
+    def calculate_sei(self, user_input):
+        """
+        Subject Entropy Index (SEI) Calculation.
+        """
+        # ИСПРАВЛЕНО: Проверка на None и корректность типа
+        if user_input is None or not isinstance(user_input, str):
+            return 0.0
+            
+        text = user_input.strip()
+        if not text: return 0.0
+        
+        entropy_score = 0.0
+        if text.islower(): entropy_score += 0.3
+        if len(text.split()) < 3: entropy_score += 0.3
+        
+        affect_markers = ["устал", "плохо", "бесполезно", "надоело", "хватит", "бесит"]
+        if any(m in text.lower() for m in affect_markers):
+            entropy_score += 0.4
+            
+        self.stats["sei_current"] = min(entropy_score, 1.0)
+        logger.info(f"🧠 [SEI SENSOR] Subject Entropy: {self.stats['sei_current']}")
+        return self.stats["sei_current"]
 
     def log_incident(self, module, reason, details):
         incident = {"timestamp": datetime.now().isoformat(), "module": module, "reason": reason, "details": details}
         self.stats["incidents"].append(incident)
         self.stats["total_blocks"] += 1
-        amount = details.get("amount_usd", 0) if isinstance(details, dict) else 0
-        self.stats["money_saved_usd"] += amount
-        if module == "VISION_EYE": self.stats["visual_discrepancies_detected"] += 1
-        logger.warning(f"[VCR] Incident logged: {module} -> {reason}")
-
-    def log_predictive_block(self, saved_amount):
-        self.stats["predictive_savings_usd"] += saved_amount
-        self.stats["total_blocks"] += 1
-        logger.info(f"[PRA] Predictive block: ${saved_amount} saved.")
-
-    def log_correction(self):
-        self.stats["auto_corrections"] += 1
-        logger.info("[VRS] Auto-correction successful.")
-
-    def log_atomic_failure(self):
-        self.stats["atomic_failures_prevented"] += 1
+        print(f"📄 [VCR] Incident logged: {module} -> {reason}")
 
 class DeltaSensor:
     def __init__(self, tolerance_threshold=0.05):
         self.tolerance = tolerance_threshold
-    def authorize_next_step(self, expected, actual, probe_type="FS_Probe"):
+    def authorize_next_step(self, expected, actual):
         delta = abs(expected - actual)
-        threshold = expected * self.tolerance
-        is_synced = delta <= threshold
-        return {
-            "status": "SYNCED" if is_synced else "HALT",
-            "color": "✅" if is_synced else "❌",
-            "reason": f"Delta: {delta:.2f} (Threshold: {threshold:.2f})"
-        }
+        is_synced = delta <= (expected * self.tolerance)
+        return {"status": "SYNCED" if is_synced else "HALT"}

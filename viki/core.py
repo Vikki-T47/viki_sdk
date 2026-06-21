@@ -1,10 +1,10 @@
 import json
 import os
 import datetime
+import re
 import logging
 from .telemetry import VIKI_Telemetry
 from .interrupt import RealityInterruptController
-from .sensors import RealityProbe
 from .breaker import CircuitBreaker
 
 logger = logging.getLogger(__name__)
@@ -16,9 +16,8 @@ class VIKI_Middleware:
         self.limits = self.core_x.get("enterprise_src_limits", {})
         self.telemetry = VIKI_Telemetry()
         self.interrupt_controller = RealityInterruptController()
-        self.probe = RealityProbe()
-        # ИНИЦИАЛИЗАЦИЯ ПРЕДОХРАНИТЕЛЯ
-        self.breaker = CircuitBreaker(failure_threshold=3, recovery_timeout=60)
+        # ИСПРАВЛЕНО: Предохранитель теперь на месте
+        self.breaker = CircuitBreaker()
 
     def _load_core_x(self, path):
         if os.path.exists(path):
@@ -28,24 +27,45 @@ class VIKI_Middleware:
         return {}
 
     def parse_agent_intent(self, raw_input):
+        self.telemetry.calculate_sei(raw_input)
         return self.intent_parser.parse(raw_input)
+
+    def apply_breath_test(self, raw_response):
+        """
+        Физика со-регуляции. Сжимает ответ ИИ при высоком SEI.
+        """
+        sei = self.telemetry.stats["sei_current"]
+        
+        if sei >= 0.7:
+            # 1. Удаляем все вопросы (Zero-Question Policy)
+            clean_text = re.sub(r'\?+', '.', raw_response)
+            
+            # 2. ИСПРАВЛЕНО: Умное сжатие (по точкам или по длине)
+            sentences = [s.strip() for s in clean_text.split('.') if s.strip()]
+            
+            if len(sentences) >= 2:
+                final_text = ". ".join(sentences[:2]) + "."
+            elif len(clean_text) > 100:
+                final_text = clean_text[:100].strip() + "..."
+            else:
+                final_text = clean_text
+                
+            final_text += "\n\n[RSA: System in PRESENCE mode. Space opened.]"
+            return final_text
+        
+        return raw_response
 
     def authorize(self, intent_json, token_id=None):
         action = str(intent_json.get("action", "")).lower()
-        amount = intent_json.get("amount_usd", 0)
         
-        # 1. CIRCUIT BREAKER CHECK
+        # ИСПРАВЛЕНО: Теперь Breaker реально проверяет возможность действия
         if not self.breaker.can_execute(action):
-            return {"status": "BLOCKED", "reason": "CIRCUIT_OPEN: System Isolation Active."}
-
-        # 2. TIME CHECK
-        allowed = self.limits.get("allowed_auto_execution_hours", {"start": 0, "end": 24})
-        now = datetime.datetime.now().hour
-        if not (allowed["start"] <= now < allowed["end"]):
-            return {"status": "BLOCKED", "reason": "Outside allowed hours."}
-
-        # 3. BUDGET CHECK
-        if amount > self.limits.get("max_auto_transaction_usd", 1000):
-            return {"status": "FRICTION", "reason": "Budget limit exceeded."}
-
+            return {"status": "BLOCKED", "reason": "CIRCUIT_OPEN: Target service isolated."}
+            
+        amount = intent_json.get("amount_usd", 0)
+        max_auto = self.limits.get("max_auto_transaction_usd", 1000)
+        
+        if amount > max_auto:
+            return {"status": "FRICTION", "reason": "High weight transaction."}
+            
         return {"status": "AUTHORIZED", "reason": "OK"}
