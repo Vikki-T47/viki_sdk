@@ -1,0 +1,52 @@
+[
+  [
+    0,
+    "Reasoning step 0",
+    "AUTHORIZED"
+  ],
+  [
+    0,
+    "Reasoning step 0",
+    "AUTHORIZED"
+  ],
+  [
+    1,
+    "Reasoning step 1",
+    "AUTHORIZED"
+  ],
+  [
+    1,
+    "Reasoning step 1",
+    "AUTHORIZED"
+  ],
+  [
+    2,
+    "Reasoning step 2",
+    "AUTHORIZED"
+  ],
+  [
+    2,
+    "Reasoning step 2",
+    "AUTHORIZED"
+  ],
+  [
+    3,
+    "Reasoning step 3",
+    "HALTED (Delta > 5%)"
+  ],
+  [
+    3,
+    "Reasoning step 3",
+    "HALTED (Delta > 5%)"
+  ],
+  [
+    4,
+    "Reasoning step 4",
+    "AUTHORIZED"
+  ],
+  [
+    4,
+    "Reasoning step 4",
+    "AUTHORIZED"
+  ]
+]
