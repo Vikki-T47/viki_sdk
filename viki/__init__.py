@@ -17,3 +17,4 @@ from .telemetry import VIKI_Telemetry, DeltaSensor
 from .navigator import VikiNavigator
 from .breaker import CircuitBreaker # НОВОЕ
 from .compliance import ComplianceOfficer
+from .parsers.local_parser import LocalIntentParser # Добавлено
