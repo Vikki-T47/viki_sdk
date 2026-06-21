@@ -7,6 +7,7 @@ from .base import BaseIntentParser
 logger = logging.getLogger(__name__)
 
 class LocalIntentParser(BaseIntentParser):
+    """Универсальный локальный провайдер (Ollama / OpenAI-compatible)."""
     def __init__(self, base_url="http://localhost:11434/v1", model="llama3"):
         self.base_url = base_url
         self.model = model
@@ -19,5 +20,6 @@ class LocalIntentParser(BaseIntentParser):
             content = response.json()['choices'][0]['message']['content']
             match = re.search(r'\{.*\}', content, re.DOTALL)
             if match: return json.loads(match.group())
-        except Exception: pass
+        except Exception as e:
+            logger.error(f"[VIKI] Local Provider Error: {e}")
         return {"action": "AMBIGUOUS", "amount_usd": 0, "target": "UNKNOWN"}

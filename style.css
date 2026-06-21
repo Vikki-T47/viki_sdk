@@ -258,3 +258,10 @@ footer {
 
 .footer-content a { color: #fff; text-decoration: none; font-weight: bold; }
 .legal { font-size: 0.65rem; color: #333; margin-top: 10px; font-family: 'JetBrains Mono'; }
+.highlight-doc {
+    border-color: var(--accent-copper) !important;
+    background: rgba(243, 166, 131, 0.03) !important;
+}
+.highlight-doc:hover {
+    background: rgba(243, 166, 131, 0.07) !important;
+}
