@@ -1,8 +1,12 @@
 {
   "enterprise_src_limits": {
-    "provider": "anthropic",
+    "provider": "local",
+    "local_config": {
+      "base_url": "http://localhost:11434/v1",
+      "model": "llama3"
+    },
     "max_auto_transaction_usd": 1000,
-    "allowed_auto_execution_hours": {"start": 9, "end": 21},
+    "allowed_auto_execution_hours": {"start": 0, "end": 24},
     "critical_actions_require_human": ["mass_mailing", "delete_database"]
   }
 }

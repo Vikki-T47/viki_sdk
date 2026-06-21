@@ -15,22 +15,26 @@ class VIKI_Middleware:
     def __init__(self, intent_parser=None, core_x_path="core_x.json"):
         self.core_x = self._load_core_x(core_x_path)
         self.limits = self.core_x.get("enterprise_src_limits", {})
+        self.telemetry = VIKI_Telemetry()
         
-        # АВТО-ВЫБОР ПРОВАЙДЕРА (Задача 1)
+        # АВТО-ВЫБОР ПРОВАЙДЕРА
         if intent_parser:
             self.intent_parser = intent_parser
         else:
             provider = self.limits.get("provider", "anthropic").lower()
-            api_key = os.getenv("ANTHROPIC_API_KEY", "STABLE_TEST")
-            
             if provider == "local":
-                self.intent_parser = LocalIntentParser()
-                logger.info("📡 [CORE] Initialized with LOCAL provider (Ollama/vLLM)")
+                # Берем настройки из core_x.json
+                local_cfg = self.limits.get("local_config", {})
+                self.intent_parser = LocalIntentParser(
+                    base_url=local_cfg.get("base_url", "http://localhost:11434/v1"),
+                    model=local_cfg.get("model", "llama3")
+                )
+                print(f"📡 [CORE] Mode: LOCAL (Ollama: {local_cfg.get('model', 'llama3')})")
             else:
+                api_key = os.getenv("ANTHROPIC_API_KEY", "STABLE_TEST")
                 self.intent_parser = AnthropicIntentParser(api_key=api_key)
-                logger.info("📡 [CORE] Initialized with ANTHROPIC provider")
+                print("📡 [CORE] Mode: CLOUD (Anthropic)")
 
-        self.telemetry = VIKI_Telemetry()
         self.interrupt_controller = RealityInterruptController()
         self.breaker = CircuitBreaker()
 
@@ -49,11 +53,13 @@ class VIKI_Middleware:
         action = str(intent_json.get("action", "")).lower()
         amount = intent_json.get("amount_usd", 0)
         
+        # 1. CIRCUIT BREAKER
         if not self.breaker.can_execute(action):
             return {"status": "BLOCKED", "reason": "CIRCUIT_OPEN"}
             
+        # 2. BUDGET
         max_auto = self.limits.get("max_auto_transaction_usd", 1000)
         if amount > max_auto:
-            return {"status": "FRICTION", "reason": "Limit exceeded"}
+            return {"status": "FRICTION", "reason": f"Amount ${amount} exceeds limit."}
             
         return {"status": "AUTHORIZED", "reason": "OK"}

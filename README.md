@@ -22,6 +22,7 @@ V.I.K.I. (Vital Interface for Kinetic Integration) is a deterministic middleware
 *   **VCR (Compliance & Reporting):** Automated audit trails for legal transparency.
 *   **The Eye:** Physical verification of visual results via Vision LLMs.
 *   **Active Environment Probing:** Real-time synchronization with financial, temporal, and visual data sources.
+*   **Privacy-First Execution: Support for local LLMs (Ollama) for offline, zero-cost, and secure processing.
 ---
 
 ## 🔥 Proven Performance: Stress-Test Results

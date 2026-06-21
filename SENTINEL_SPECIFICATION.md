@@ -45,6 +45,8 @@ V.I.K.I. Sentinel manages the agent lifecycle through deterministic filters:
   - DVP (Delta Verification Protocol): Truth detector. Compares agent
     self-reports against actual physical changes in the environment.
 
+Model Agnostic Routing: Support for both Cloud (Anthropic/OpenAI) and Local (Ollama/vLLM) providers via Strategy Pattern. [NEW in v1.3.3]    
+
 3.3. Immunity Echelon
 
   - VRI (Reality Interrupt): Live token mechanism. Immediate revocation of
