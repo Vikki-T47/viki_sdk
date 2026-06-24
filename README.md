@@ -7,7 +7,7 @@
 *Built on the Reality Synchronization Architecture (RSA) framework*
 
 [![Status](https://img.shields.io/badge/Status-Certified_Stable-success?style=flat-square)](#)
-[![Version](https://img.shields.io/badge/Version-1.4.2-blue?style=flat-square)](#)
+[![Version](https://img.shields.io/badge/Version-1.7.5-blue?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-MIT-orange?style=flat-square)](#)
 
 V.I.K.I. (Vital Interface for Kinetic Integration) is a deterministic middleware layer that operates at the **Execution Boundary** — providing a reliable "braking system" for autonomous AI agents.
@@ -25,7 +25,7 @@ V.I.K.I. (Vital Interface for Kinetic Integration) is a deterministic middleware
 ---
 
 ## 🔥 Proven Performance: 1000-Run Stress Test
-*Empirical results from the `chain_probability_tester` (v1.7.3)*
+*Empirical results from the statistical validation phase (v1.7.5)*
 
 | Metric | Vanilla Agent (Unprotected) | V.I.K.I. Guarded (RSA) |
 |---|---|---|
