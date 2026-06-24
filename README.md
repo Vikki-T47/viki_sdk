@@ -44,6 +44,7 @@ V.I.K.I. (Vital Interface for Kinetic Integration) is a deterministic middleware
 from viki.core import VIKI_Middleware
 # V.I.K.I. auto-detects provider (Local or Cloud) via core_x.json
 viki = VIKI_Middleware()
+```python
 2. Protect Your Functions
 python
 from viki.decorators import enforce_boundary
@@ -52,6 +53,7 @@ from viki.decorators import enforce_boundary
 def transfer_funds(intent_text):
     # This logic is now protected by RSA Deterministic Law
     return "Transaction Successful"
+```python    
 📚 Documentation
 SENTINEL_PASSPORT — Product specification & Benchmarks.
 
