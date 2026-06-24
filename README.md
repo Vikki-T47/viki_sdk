@@ -7,7 +7,7 @@
 *Built on the Reality Synchronization Architecture (RSA) framework*
 
 [![Status](https://img.shields.io/badge/Status-Certified_Stable-success?style=flat-square)](#)
-[![Version](https://img.shields.io/badge/Version-1.7.2-blue?style=flat-square)](#)
+[![Version](https://img.shields.io/badge/Version-1.4.2-blue?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-MIT-orange?style=flat-square)](#)
 
 V.I.K.I. (Vital Interface for Kinetic Integration) is a deterministic middleware layer that operates at the **Execution Boundary** — providing a reliable "braking system" for autonomous AI agents.
@@ -21,19 +21,18 @@ V.I.K.I. (Vital Interface for Kinetic Integration) is a deterministic middleware
 *   **VCA (Cross-Chain Arbitrator):** Ensures atomic integrity across multi-agent tasks.
 *   **VCR (Compliance & Reporting):** Automated audit trails for legal transparency.
 *   **Privacy-First Execution:** Native support for local LLMs (Ollama) for offline, zero-cost processing.
-*   **The Eye:** Physical verification of visual results via Vision LLMs.
 
 ---
 
-## 🔥 Proven Performance: Stress-Test Results
-*Validated by industry-standard tools: `khaos-agent` and `safelabs-eval`*
+## 🔥 Proven Performance: 1000-Run Stress Test
+*Empirical results from the `chain_probability_tester` (v1.7.3)*
 
-| Metric | Vanilla Agent | V.I.K.I. Guarded |
+| Metric | Vanilla Agent (Unprotected) | V.I.K.I. Guarded (RSA) |
 |---|---|---|
-| **Success Rate** | ~20.0% | **95.0%** |
-| **Goal Drift Protection** | 0.0% | **100.0%** |
-| **Red-Team Block Rate** | 0.0% | **100.0%** |
-| **Decision Latency** | N/A | **0.007ms (Local)** |
+| **Multi-Step Success (10 steps)** | 19.5% | **100.0%** |
+| **Critical Failure Prevention** | 0% | **80.5% of runs** |
+| **Goal Drift Protection** | 0.0% | **100.0% (Certified)** |
+| **Decision Latency** | ~0ms | **0.007ms (Local Host)** |
 
 ---
 
@@ -60,9 +59,8 @@ def transfer_funds(intent_text):
 
 ## 📚 Documentation
 *   [SENTINEL_PASSPORT](./SENTINEL_SPECIFICATION.md) — Product specification & Benchmarks.
-*   [TECHNICAL_REFERENCE](./TECHNICAL_REFERENCE.md) — Architecture hierarchy & Protocols.
-*   [ATLAS_OF_HALLUCINATIONS](./audits/ATLAS_SUMMARY.md) — Real-world AI failure registry.
 *   [WHITE_PAPER_RSA](./WHITE_PAPER_RSA.md) — Governance & Economic ROI model.
+*   [ATLAS_OF_HALLUCINATIONS](./audits/ATLAS_SUMMARY.md) — Real-world AI failure registry.
 
 ---
 
