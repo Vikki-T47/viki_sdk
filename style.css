@@ -130,6 +130,7 @@ body {
     gap: 20px;
 }
 
+/* BUTTONS */
 .btn {
     padding: 16px 32px;
     text-decoration: none;
@@ -146,6 +147,7 @@ body {
 .secondary { background: transparent; color: #fff; }
 .secondary:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
 
+/* STATS PANEL */
 .stats-panel {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -164,6 +166,7 @@ body {
 .stat-lab { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: #555; }
 .highlight { border-color: var(--terminal-green); }
 
+/* CONTENT GRID */
 .grid-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -180,7 +183,7 @@ body {
 .info-card h3 { color: #fff; margin-top: 0; font-size: 0.9rem; letter-spacing: 2px; }
 .text-link { color: var(--accent-blue); text-decoration: none; font-weight: bold; font-family: 'JetBrains Mono'; font-size: 0.8rem; }
 
-/* DOCUMENTATION GRID (3 COLUMNS) */
+/* DOCUMENTATION GRID (2x2) */
 .docs-module {
     border: 1px solid var(--border);
     background: rgba(255,255,255,0.01);
@@ -197,26 +200,28 @@ body {
 
 .docs-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* 2 колонки */
-    grid-template-rows: 1fr 1fr;    /* 2 ряда */
+    grid-template-columns: 1fr 1fr; /* 2 COLUMNS */
     padding: 20px;
-    gap: 15px;
+    gap: 20px;
 }
 
 .doc-item {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: block;
     text-decoration: none;
-    padding: 20px;
+    padding: 25px 20px;
     border: 1px solid var(--border);
-    transition: 0.2s;
+    transition: 0.3s;
     background: rgba(255,255,255,0.01);
 }
 
 .doc-item:hover {
     border-color: var(--terminal-green);
     background: rgba(0, 255, 65, 0.03);
+    transform: translateY(-2px);
+}
+
+.highlight-doc {
+    border-color: var(--accent-copper) !important;
 }
 
 .doc-code { display: block; font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--terminal-green); }
@@ -260,10 +265,3 @@ footer {
 
 .footer-content a { color: #fff; text-decoration: none; font-weight: bold; }
 .legal { font-size: 0.65rem; color: #333; margin-top: 10px; font-family: 'JetBrains Mono'; }
-.highlight-doc {
-    border-color: var(--accent-copper) !important;
-    background: rgba(243, 166, 131, 0.03) !important;
-}
-.highlight-doc:hover {
-    background: rgba(243, 166, 131, 0.07) !important;
-}
