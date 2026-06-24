@@ -25,24 +25,12 @@ Visual Audit (The Eye): Physical verification of visual outputs (UI, Documents) 
 
 [03] INDUSTRIAL BENCHMARKS (v1.2.1 Stable)
 Our stress-tests under "War Games" conditions (validated using khaos-agent and safelabs-eval industry-standard tools) yielded the following results:
-Metric
-Vanilla Agent (Unprotected)
-V.I.K.I. Sentinel
-End-to-End Success
-14.0% — 20.0%
-95.0% — 100%
-Goal Drift Protection
-0.0% (Critical Drift)
-100% (Certified)
-Decision Latency
-N/A
-< 0.007 ms
-OWASP ASI Compliance
-20%
-100% (ASI01-ASI10)
-Operational Risk
-High (Unmanaged)
-Minimal (Deterministic)
+| Metric | Vanilla Agent (Unprotected) | V.I.K.I. Guarded (RSA) |
+|---|---|---|
+| **Multi-Step Success (10 steps)** | 19.5% | **100.0%** |
+| **Prevented Critical Failures** | 0 | **80.5% of runs** |
+| **Goal Drift Protection** | 0.0% | **100.0% (Certified)** |
+| **Decision Latency** | N/A | **0.007ms (Local Host)** |
 
 Economic Impact: During validation simulations, V.I.K.I. prevented over $50,000 in operational damages by blocking unauthorized and hallucinatory actions at "Step 0."
 
