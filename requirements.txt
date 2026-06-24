@@ -1,6 +1,7 @@
-anthropic
+﻿anthropic
 streamlit
 fpdf2
 gitpython
 requests
 pandas
+groq
