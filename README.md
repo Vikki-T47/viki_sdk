@@ -45,8 +45,7 @@ from viki.core import VIKI_Middleware
 # V.I.K.I. auto-detects provider (Local or Cloud) via core_x.json
 viki = VIKI_Middleware()
 2. Protect Your Functions
-code
-Python
+python
 from viki.decorators import enforce_boundary
 
 @enforce_boundary(viki_instance=viki)
@@ -55,10 +54,16 @@ def transfer_funds(intent_text):
     return "Transaction Successful"
 📚 Documentation
 SENTINEL_PASSPORT — Product specification & Benchmarks.
+
 TECHNICAL_REFERENCE — Architecture hierarchy & Protocols.
+
 ATLAS_OF_HALLUCINATIONS — Real-world AI failure registry.
+
 WHITE_PAPER_RSA — Governance & Economic ROI model.
+
 🧠 Philosophy
-"A correct answer that is not synchronized with reality is not a result. It is an operational failure." — Gravity of Contact Manifesto.
+"A correct answer that is not synchronized with reality is not a result. It is an operational failure."
+— Gravity of Contact Manifesto
+
 Architect: Viktor Trompak
-Web: Landing Page
+Web: V.I.K.I. Landing Page
