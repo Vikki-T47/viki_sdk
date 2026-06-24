@@ -52,8 +52,7 @@ from viki.decorators import enforce_boundary
 
 @enforce_boundary(viki_instance=viki)
 def transfer_funds(intent_text):
-    # This logic is now protected by RSA Deterministic Law
-    return "Transaction Successful"
+    # This logic is now protected by RSA Deterministic Law return "Transaction Successful"
     ```
 📚 Documentation
 SENTINEL_PASSPORT — Product specification & Benchmarks.
