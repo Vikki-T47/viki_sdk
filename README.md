@@ -70,6 +70,5 @@ def transfer_funds(intent_text):
 
 ---
 
-**Architect:** [Viktor Trompak](https://www.linkedin.com/in/vikki-trompak-4213693a0/)  
-**Home:** Planet Earth  
+**Architect:** [Viktor Trompak](https://www.linkedin.com/in/vikki-trompak-4213693a0/)    
 **Web:** [Landing Page](https://vikki-t47.github.io/viki_sdk/)
