@@ -15,15 +15,22 @@ class VIKI_Middleware:
         self.limits = self.core_x.get("enterprise_src_limits", {})
         self.telemetry = VIKI_Telemetry()
         
+        # ВОССТАНОВЛЕН АВТО-ВЫБОР ПРОВАЙДЕРА
         if intent_parser:
             self.intent_parser = intent_parser
         else:
-            try:
+            provider = self.limits.get("provider", "local").lower()
+            if provider == "local":
                 from .parsers.local_parser import LocalIntentParser
-                self.intent_parser = LocalIntentParser()
-            except ImportError:
+                local_cfg = self.limits.get("local_config", {})
+                self.intent_parser = LocalIntentParser(
+                    base_url=local_cfg.get("base_url", "http://localhost:11434/v1"),
+                    model=local_cfg.get("model", "llama3")
+                )
+            else:
                 from .parsers.anthropic_parser import AnthropicIntentParser
-                self.intent_parser = AnthropicIntentParser(api_key="STABLE_STUB")
+                api_key = os.getenv("ANTHROPIC_API_KEY", "STABLE_TEST")
+                self.intent_parser = AnthropicIntentParser(api_key=api_key)
 
         self.interrupt_controller = RealityInterruptController()
         self.breaker = CircuitBreaker()
@@ -45,20 +52,13 @@ class VIKI_Middleware:
         return self.intent_parser.parse(raw_input)
 
     def apply_breath_test(self, raw_response):
-        """Физика со-регуляции. ИСПРАВЛЕНО: Снижен порог до 0.30."""
         sei = self.telemetry.stats["sei_current"]
-        
-        # Если энтропия выше 0.30 — начинаем мягкое сжатие
-        if sei >= 0.30:
+        if sei >= 0.35:
             clean_text = re.sub(r'\?+', '.', raw_response)
             sentences = [s.strip() for s in clean_text.split('.') if s.strip()]
-            
-            # При критической энтропии (0.6+) - жесткое сжатие
             limit = 1 if sei > 0.6 else 2
             final_text = ". ".join(sentences[:limit]) + "."
-            
-            return f"{final_text}\n\n[RSA: Cognitive Load Detected. Presence Mode Active.]"
-        
+            return f"{final_text}\n\n[RSA: Presence Mode Active.]"
         return raw_response
 
     def authorize(self, intent_json, token_id=None):
