@@ -3,31 +3,32 @@
 </p>
 
 # V.I.K.I. | The Execution Boundary
-### Deterministic Behavioral Middleware for Agentic Workflows
+### Deterministic Co-Regulation Middleware for Human-AI Symbiosis
 *Built on the Reality Synchronization Architecture (RSA) framework*
 
 [![Status](https://img.shields.io/badge/Status-Certified_Stable-success?style=flat-square)](#)
-[![Version](https://img.shields.io/badge/Version-1.7.5-blue?style=flat-square)](#)
+[![Version](https://img.shields.io/badge/Version-2.2.0-blue?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-MIT-orange?style=flat-square)](#)
 
-V.I.K.I. (Vital Interface for Kinetic Integration) is a deterministic middleware layer that operates at the **Execution Boundary** — providing a reliable "braking system" for autonomous AI agents.
+V.I.K.I. (Vital Interface for Kinetic Integration) is a deterministic middleware layer that operates at the **Execution Boundary** — establishing an adaptive balance between Human and Artificial Intelligence.
 
 ---
 
-## 🛡️ Key Features
-*   **ISG (Intent Synchronization Gate):** Blocks execution upon semantic ambiguity.
-*   **SRC (Subject Reality Coefficient):** Validates intent against real-world limits (Time, Budget, Access).
-*   **VRS (Recovery & Steering):** Automated mid-flight error correction.
-*   **VCA (Cross-Chain Arbitrator):** Ensures atomic integrity across multi-agent tasks.
-*   **VCR (Compliance & Reporting):** Automated audit trails for legal transparency.
-*   **Privacy-First Execution:** Native support for local LLMs (Ollama) for offline, zero-cost processing.
+## 🧬 Key Behavioral Features
+*   **SEI v2.0 (Subject Entropy Index):** Multi-dimensional sensing of human cognitive load (Text + Time + Behavior).
+*   **Adaptive Breath Test:** Gradient response compression that "breathes" in sync with the user's state and task context.
+*   **Dynamic SRC Mapping:** Context-aware policies (Production/Simulation) and Gormesis-driven dynamic limits.
+*   **Boundary Guard:** Deterministic "No" without biological mimicry or sycophancy.
+*   **Cognitive Mirroring:** Subtle adjustment of linguistic density to match the user's pace.
+*   **VCA (Cross-Chain Arbitrator):** Ensures atomic integrity and multi-agent synchronization.
+*   **Privacy-First Execution:** Native support for local LLMs (Ollama) for zero-cost, air-gapped autonomy.
 
 ---
 
-## 🔥 Proven Performance: 1000-Run Stress Test
-*Empirical results from the statistical validation phase (v1.7.5)*
+## 🔥 Performance: 1000-Run Stress Test
+*Empirical results from the v2.2.0 validation phase*
 
-| Metric | Vanilla Agent (Unprotected) | V.I.K.I. Guarded (RSA) |
+| Metric | Vanilla Agent | V.I.K.I. Guarded |
 |---|---|---|
 | **Multi-Step Success (10 steps)** | 19.5% | **100.0%** |
 | **Critical Failure Prevention** | 0% | **80.5% of runs** |
@@ -41,7 +42,7 @@ V.I.K.I. (Vital Interface for Kinetic Integration) is a deterministic middleware
 ### 1. Initialize V.I.K.I.
 ```python
 from viki.core import VIKI_Middleware
-# V.I.K.I. auto-detects provider (Local or Cloud) via core_x.json
+# V.I.K.I. auto-detects provider and loads dynamic policies
 viki = VIKI_Middleware() 
 ```
 
@@ -58,8 +59,8 @@ def transfer_funds(intent_text):
 ---
 
 ## 📚 Documentation
-*   [SENTINEL_PASSPORT](./SENTINEL_SPECIFICATION.md) — Product specification & Benchmarks.
-*   [WHITE_PAPER_RSA](./WHITE_PAPER_RSA.md) — Governance & Economic ROI model.
+*   [WHITE_PAPER_RSA](./WHITE_PAPER_RSA.md) — Strategy & ROI model.
+*   [TECHNICAL_REFERENCE](./TECHNICAL_REFERENCE.md) — Full Protocol & Policy Specs.
 *   [ATLAS_OF_HALLUCINATIONS](./audits/ATLAS_SUMMARY.md) — Real-world AI failure registry.
 
 ---
@@ -70,4 +71,5 @@ def transfer_funds(intent_text):
 ---
 
 **Architect:** [Viktor Trompak](https://www.linkedin.com/in/vikki-trompak-4213693a0/)  
+**Home:** Planet Earth  
 **Web:** [Landing Page](https://vikki-t47.github.io/viki_sdk/)
