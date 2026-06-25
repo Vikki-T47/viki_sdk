@@ -9,38 +9,32 @@ class VikiGraphController:
         self.navigator = VikiNavigator(db_path)
 
     def execute_chain(self, task_id, steps_list, initial_state):
-        saved = self.navigator.load_state(task_id)
-        current_step_idx = saved["current_step"] if saved else 0
-        state = saved["state_data"] if saved else initial_state
+        # 1. ЗАМОРОЗКА ИНВАРИАНТОВ
+        self.viki.lock_chain_invariants({
+            "base_price": initial_state.get("base_price", 0),
+            "currency": initial_state.get("currency", "USD")
+        })
+
+        current_state = initial_state
         total = len(steps_list)
 
-        for i in range(current_step_idx, total):
-            current_task = steps_list[i]
-            service_name = current_task.__name__
-
-            # 1. Проверка Circuit Breaker
-            if not self.viki.breaker.can_execute(service_name):
-                return {"status": "HALTED", "reason": f"CIRCUIT_OPEN for {service_name}"}
-
-            # 2. Sentinel Authorization
-            intent = {"action": service_name, "amount_usd": state.get("budget", 0)}
-            auth = self.viki.authorize(intent)
-
-            # Трассировка в Черный Ящик
-            self.navigator.log_trace(task_id, i, f"Executing {service_name}", auth["status"])
-
-            if auth["status"] != "AUTHORIZED":
-                self.navigator.save_checkpoint(task_id, i, total, state, auth["status"])
-                return {"status": auth["status"], "step": i}
-
-            # 3. Выполнение с обработкой ошибок для Breaker
+        for i, step in enumerate(steps_list):
+            agent_id = f"Agent_Step_{i}"
             try:
-                state = current_task(state)
-                self.viki.breaker.report_success(service_name)
-                self.navigator.save_checkpoint(task_id, i + 1, total, state, "ACTIVE")
+                # Агент выполняет шаг
+                new_state = step(current_state)
+                
+                # 2. ПРОВЕРКА CHAIN GUARD (Стык между агентами)
+                validation = self.viki.verify_cascade(new_state, agent_id)
+                
+                if validation["status"] == "VIOLATION":
+                    print(f"🛑 [CONDUCTOR] Cascade breach at {agent_id}: {validation['reason']}")
+                    return {"status": "HALTED", "reason": validation["reason"]}
+
+                current_state = new_state
+                self.navigator.save_checkpoint(task_id, i + 1, total, current_state, "ACTIVE")
+                
             except Exception as e:
-                self.viki.breaker.report_failure(service_name)
-                self.navigator.save_checkpoint(task_id, i, total, state, "ERROR")
                 return {"status": "ERROR", "reason": str(e)}
-            
-        return {"status": "COMPLETED", "final_state": state}
+
+        return {"status": "COMPLETED", "final_state": current_state}
