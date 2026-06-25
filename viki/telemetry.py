@@ -25,39 +25,37 @@ class VIKI_Telemetry:
         return cls._instance
 
     def trigger_rest(self):
+        """Полный сброс когнитивного напряжения."""
         self.sei_sensor.cool_down()
         self.stats["sei_current"] = 0.0
         self.stats["last_sei_update"] = time.time()
+        print("❄️ [TELEMETRY] Affective state reset.")
 
     def update_sei(self, user_input, context=None):
-        if user_input and user_input.strip():
+        """Обновление SEI с защитой от пустых данных."""
+        if user_input and isinstance(user_input, str) and user_input.strip():
             self.sei_sensor.update(user_input, context)
             self.stats["sei_current"] = self.sei_sensor.calculate()
         self.stats["last_sei_update"] = time.time()
         return self.stats["sei_current"]
 
-    # --- ВОССТАНОВЛЕННЫЕ B2B МЕТОДЫ ---
     def log_incident(self, module, reason, details):
-        incident = {"timestamp": datetime.now().isoformat(), "module": module, "reason": reason, "details": details, "sei": self.stats["sei_current"]}
+        """Единый лог для всех типов нарушений (B2B/B2C)."""
+        incident = {
+            "timestamp": datetime.now().isoformat(),
+            "module": module,
+            "reason": reason,
+            "details": details,
+            "sei_at_moment": self.stats["sei_current"]
+        }
         self.stats["incidents"].append(incident)
         self.stats["total_blocks"] += 1
-
-    def log_predictive_block(self, amount):
-        self.stats["total_blocks"] += 1
-        self.stats["money_saved_usd"] += amount
-        print(f"🛡️ [VCR] Predictive block: Saved ${amount}")
-
-    def log_correction(self):
-        self.stats["auto_corrections"] += 1
-
-    def log_atomic_failure(self, chain_id):
-        print(f"⚠️ [VCR] Atomic failure in chain: {chain_id}. Rolling back...")
+        logger.warning(f"🚨 [INCIDENT] {module}: {reason}")
 
 class DeltaSensor:
     def __init__(self, tolerance_threshold=0.05):
         self.tolerance = tolerance_threshold
     def authorize_next_step(self, expected, actual, probe_type="GENERIC"):
-        # Возвращен параметр probe_type для совместимости
         delta = abs(expected - actual)
         is_synced = delta <= (expected * self.tolerance)
         return {"status": "SYNCED" if is_synced else "HALT", "probe": probe_type}
