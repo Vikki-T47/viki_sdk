@@ -1,8 +1,10 @@
 import streamlit as st
 import sys
 import os
+import json
 import datetime
 
+# Подключаем V.I.K.I. SDK
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
@@ -12,7 +14,7 @@ except ImportError as e:
     st.error(f"❌ System Error: {e}")
     st.stop()
 
-VERSION = "1.9.5"
+VERSION = "2.0.1"
 telemetry = VIKI_Telemetry()
 
 st.set_page_config(page_title=f"V.I.K.I. | Sentinel Dashboard v{VERSION}", layout="wide")
@@ -23,29 +25,37 @@ if 'viki' not in st.session_state:
 
 viki = st.session_state.viki
 
-# --- SIDEBAR: REALITY & COGNITIVE CONTROL ---
+# --- ШАГ 0: ПРЕДВАРИТЕЛЬНЫЙ АНАЛИЗ (До отрисовки UI) ---
+# Мы берем значение из стейта, чтобы оно было доступно везде
+agent_input = st.text_input("Enter User Signal:", key="user_input_field")
+task_context = st.selectbox("Task Context:", ["general", "technical", "emotional"], key="context_selector")
+
+if agent_input:
+    # Важно: это обновляет профиль зеркала и SEI ДО того, как мы нарисуем сайдбар
+    viki.parse_agent_intent(agent_input)
+
+# --- ШАГ 1: SIDEBAR (Теперь данные всегда свежие) ---
 with st.sidebar:
     st.header("⚙️ Configuration")
     st.write(f"**Version:** {VERSION}")
     
-    st.subheader("🌍 Reality Control")
-    new_mode = st.radio("SRC Mode:", ["production", "simulation", "audit"], 
-                        index=["production", "simulation", "audit"].index(viki.src_context.mode))
-    if st.button("🛰️ Apply Mode"):
-        viki.set_src_mode(new_mode)
-        st.rerun()
+    st.subheader("🪞 Mirror Status")
+    prof = viki.mirror_processor.user_profile
+    st.write(f"Pace: **{'BRIEF' if prof['is_brief'] else 'NORMAL'}**")
+    st.write(f"Complexity Score: **{prof['punctuation_density']:.2f}**")
     
     st.divider()
     sei = telemetry.stats.get("sei_current", 0.0)
     st.subheader("🧠 Cognitive Load (SEI)")
     st.progress(sei)
     st.markdown(f"Status: **{sei:.2f}**")
-    if st.button("♻️ Reset Engine State"):
+    
+    if st.button("♻️ Reset Engine"):
         viki.src_context.error_count = 0
         telemetry.trigger_rest()
         st.rerun()
 
-# --- TOP PANEL ---
+# --- ШАГ 2: ПАНЕЛЬ МЕТРИК ---
 st.title("🛡️ V.I.K.I. Dispatcher Monitor")
 m1, m2, m3, m4 = st.columns(4)
 m1.metric("🛑 Blocked", telemetry.stats.get("total_blocks", 0))
@@ -54,30 +64,23 @@ m3.metric("⏳ Mode", viki.src_context.mode.upper())
 m4.metric("💰 Active Limit", f"${int(viki.src_policy.get_context_limits(viki.src_context).get('max_auto_transaction_usd', 0))}")
 st.divider()
 
-# --- SIMULATOR ---
-col_input, col_config = st.columns([2, 1])
-with col_input:
-    agent_input = st.text_input("Enter User Signal:", key="user_input")
-with col_config:
-    task_type = st.selectbox("Current Task Context:", ["general", "technical", "emotional"])
-
+# --- ШАГ 3: РЕЗУЛЬТАТЫ ---
 if agent_input:
-    intent_json = viki.parse_agent_intent(agent_input)
-    # Имитируем типичный перегруженный ответ ИИ
-    raw_ai_response = "I have analyzed your request. It seems correct. Should we proceed? I also recommend checking the logs, verifying the API quota, and updating the local database. What do you think about this plan?"
+    raw_ai_response = "I have analyzed your request. It seems correct according to current protocols. However, we should also verify the network latency, check the API key permissions, and ensure the target database is ready for write operations. Do you have any additional instructions for me before I initiate this task?"
     
-    final_output = viki.apply_breath_test(raw_ai_response, task_type)
+    # Применяем фильтры
+    final_output = viki.apply_behavioral_filters(raw_ai_response, task_context)
     
     col_l, col_r = st.columns(2)
     with col_l:
         st.write("🤖 **Parsed Intent:**")
-        st.json(intent_json)
-        st.write("**AI Raw Response:**")
+        st.json(viki.intent_parser.parse(agent_input))
+        st.write("**AI Raw Message:**")
         st.caption(raw_ai_response)
     with col_r:
-        st.write("🛡️ **VIKI Guarded Output:**")
+        st.write("🛡️ **VIKI Behavioral Output:**")
         if "[RSA:" in final_output: st.warning(final_output)
         else: st.success(final_output)
         
-        auth = viki.authorize(intent_json)
-        if auth["status"] == "FRICTION": st.error(f"🛑 FRICTION: {auth['reason']}")
+        auth = viki.authorize({"amount_usd": 0}) # Упрощенный тест
+        if auth["status"] == "AUTHORIZED": st.info("✅ ACTION AUTHORIZED")
