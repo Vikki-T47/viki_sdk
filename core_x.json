@@ -1,21 +1,17 @@
 {
   "enterprise_src_limits": {
     "provider": "local",
-    "local_config": {"model": "llama3"},
+    "local_config": {
+      "base_url": "http://localhost:11434/v1",
+      "model": "llama3"
+    },
     "max_auto_transaction_usd": 1000,
     "allowed_auto_execution_hours": {"start": 9, "end": 21},
-    "critical_actions_require_human": ["mass_mailing", "delete_database"]
+    "critical_actions_require_human": ["delete_database", "mass_mailing"]
   },
   "context_policies": {
-    "simulation": {
-      "max_auto_transaction_usd": 5000,
-      "allowed_auto_execution_hours": {"start": 0, "end": 24},
-      "critical_actions_require_human": []
-    },
-    "audit": {
-      "max_auto_transaction_usd": 10000,
-      "critical_actions_require_human": ["delete_database"]
-    }
+    "production": {"max_auto_transaction_usd": 1000},
+    "simulation": {"max_auto_transaction_usd": 5000}
   },
   "dynamic_rules": {
     "reduce_after_error": true,

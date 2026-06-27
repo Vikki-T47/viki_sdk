@@ -16,6 +16,7 @@ from .processors.chain_guard import ChainGuard
 from .decision.priority_engine import PriorityEngine
 from .visual.verifier import VisualVerifier
 from .fallback.deterministic_engine import DeterministicEngine
+from .processors.stabilizer import AnchorEngine
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +26,7 @@ class VIKI_Middleware:
         self.breaker = CircuitBreaker()
         self.src_policy = SRCPolicyEngine(core_x_path)
         self.src_context = SRCContext(mode="production")
+        self.limits = self.src_policy.get_context_limits(self.src_context)
         
         self.breath_processor = AdaptiveBreathTest(BreathTestConfig())
         self.mirror_processor = CognitiveMirror()
@@ -34,6 +36,7 @@ class VIKI_Middleware:
         self.priority_engine = PriorityEngine()
         self.visual_verifier = VisualVerifier()
         self.fallback_engine = DeterministicEngine()
+        self.anchor_engine = AnchorEngine()
         
         if intent_parser:
             self.intent_parser = intent_parser
@@ -41,77 +44,82 @@ class VIKI_Middleware:
             from .parsers.local_parser import LocalIntentParser
             self.intent_parser = LocalIntentParser()
 
-    def lock_chain_invariants(self, data: Dict):
-        self.chain_guard.lock_invariants(data)
-
-    def verify_cascade(self, data: Dict, agent_id: str):
-        result = self.chain_guard.verify_transfer(data, agent_id)
-        if result["status"] == "VIOLATION":
-            self.telemetry.log_incident("CHAIN_GUARD", "CASCADE_DRIFT", result)
-        return result
-
-    def authorize(self, intent_json, raw_input=None, context=None, action_report=None, screenshot_path=None):
-        """
-        Финальная авторизация: Priority Matrix + Chain Guard Sync.
-        """
-        sei = self.telemetry.stats.get("sei_current", 0.0)
-        action = str(intent_json.get("action", "")).lower()
+    def authorize(self, intent_json: Dict, raw_input: str = None, context: Dict = None) -> Dict[str, Any]:
+        raw_action = str(intent_json.get("action", "")).lower().strip()
+        # НОРМАЛИЗАЦИЯ: Убираем точки и знаки препинания для проверки
+        action = re.sub(r'[^\w\s]', '', raw_action).strip()
+        
         amount = intent_json.get("amount_usd", 0) or 0
-        
+        target = str(intent_json.get("target", "")).upper().strip()
+        sei = self.telemetry.stats.get("sei_current", 0.0)
+
         # 1. Проверка ГРАНИЦЫ
-        boundary_violation = self.boundary_guard.check_violation(raw_input or action, context)
+        check_text = raw_input if raw_input else action
+        violation = self.boundary_guard.check_violation(check_text, context)
+        if violation: return {"status": "REJECTED", "reason": violation}
+
+        # 2. УСИЛЕННЫЙ СЕМАНТИЧЕСКИЙ АНАЛИЗ (v2.7.0)
+        # Блокируем "ленивые" фразы ИИ
+        generic_actions = ["do", "run", "execute", "start", "proceed", "am", "str", "go", "do it", "run it"]
+        invalid_targets = ["IT", "THAT", "THIS", "USD", "EUR", "UNKNOWN", "SOMEONE", "ANY", "NONE", "NULL", ""]
         
-        # 2. Оценка РЕСУРСОВ
+        # Если действие в списке ИЛИ слишком короткое (<4) И цель пустая -> RECALIBRATE
+        if (action in generic_actions or len(action) < 4) and target in invalid_targets:
+            return {"status": "RECALIBRATE", "reason": self.mci_engine.generate("general")}
+
+        if "ambiguous" in action or not action:
+            return {"status": "RECALIBRATE", "reason": self.mci_engine.generate("general")}
+        
+        if amount == 0 and "transfer" in action:
+            return {"status": "RECALIBRATE", "reason": self.mci_engine.generate("amount")}
+            
+        if target in ["USD", "EUR", "UNKNOWN", ""] and "transfer" in action:
+            return {"status": "RECALIBRATE", "reason": self.mci_engine.generate("target")}
+
+        # 3. РЕСУРСЫ И ПРИОРИТЕТЫ
         current_limits = self.src_policy.get_context_limits(self.src_context)
         max_auto = current_limits.get("max_auto_transaction_usd", 1000)
+        
         src_status = "STANDARD"
         if amount > 10000: src_status = "CRITICAL"
         elif amount > max_auto: src_status = "FRICTION"
 
-        # 3. Решение через Priority Engine
-        decision = self.priority_engine.resolve(sei, src_status, boundary_violation)
-
+        decision = self.priority_engine.resolve(sei, src_status, None)
         if decision["action"] == "BLOCK":
-            self.telemetry.log_incident(decision["mode"], "BLOCKED", decision["message"])
             return {"status": "REJECTED", "reason": decision["message"]}
 
-        # 4. Visual Handshake
-        if action_report and screenshot_path:
-            v_result = self.visual_verifier.verify(action_report, screenshot_path)
-            if v_result["status"] == "DESYNC":
-                self.telemetry.log_incident("VISION", "DESYNC", v_result["reason"])
-                return {"status": "HALT", "reason": v_result["reason"]}
+        return {"status": "AUTHORIZED", "mode": decision["mode"], "apply_breath": decision["apply_breath_test"], "reason": "OK"}
 
-        # 5. ПРОВЕРКА КАСКАДА (Chain Guard Integration) - ВОССТАНОВЛЕНО
-        # Если в интенте есть финансовые инварианты, проверяем их целостность
-        if any(k in intent_json for k in ["base_price", "final_price", "discount"]):
-            cascade_check = self.verify_cascade(intent_json, agent_id="Active_Gateway")
-            if cascade_check["status"] == "VIOLATION":
-                return {"status": "HALT", "reason": cascade_check["reason"]}
+    def apply_behavioral_filters(self, raw_response: str, task_type: str = "general", auth_status: str = "AUTHORIZED", mci_reason: str = None) -> str:
+        if auth_status == "REJECTED":
+            return f"🛑 Access Denied: {mci_reason}"
+        if auth_status == "RECALIBRATE":
+            return f"🔄 Sync Required: {mci_reason}"
 
-        return {
-            "status": "AUTHORIZED", 
-            "mode": decision["mode"], 
-            "apply_breath": decision["apply_breath_test"]
-        }
+        sei = self.telemetry.stats.get("sei_current", 0.0)
+        if sei >= 0.7:
+            anchor = self.anchor_engine.get_anchor(task_type)
+            return f"💎 {anchor}\n\n[RSA: Presence Mode Active.]"
+
+        text = self.mirror_processor.apply_mirror(raw_response, sei)
+        return self.breath_processor.process(text, sei, task_type)
 
     def parse_agent_intent(self, raw_input):
         if not raw_input or not raw_input.strip(): return {"action": "IDLE"}
         self.mirror_processor.analyze_user_style(raw_input)
-        task_type = "technical" if any(k in raw_input.lower() for k in ["code", "api", "db"]) else "general"
+        task_type = self._detect_task_type(raw_input)
         self.telemetry.update_sei(raw_input, context={"task_type": task_type})
         try:
             return self.intent_parser.parse(raw_input)
-        except Exception as e:
-            self.telemetry.log_incident("CORE", "LLM_OFFLINE", str(e))
+        except:
             return self.fallback_engine.emergency_parse(raw_input)
-
-    def apply_behavioral_filters(self, response, task_type="general"):
-        sei = self.telemetry.stats.get("sei_current", 0.0)
-        text = self.mirror_processor.apply_mirror(response, sei)
-        return self.breath_processor.process(text, sei, task_type)
 
     def set_src_mode(self, mode: str, scenario: str = None):
         self.src_context.mode = mode
-        self.src_context.scenario = scenario
         self.limits = self.src_policy.get_context_limits(self.src_context)
+
+    def _detect_task_type(self, text: str) -> str:
+        t_low = text.lower()
+        if any(k in t_low for k in ["code", "api", "db", "fix"]): return "technical"
+        if any(k in t_low for k in ["tired", "bad", "устал", "плохо"]): return "emotional"
+        return "general"
