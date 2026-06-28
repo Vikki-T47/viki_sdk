@@ -1,25 +1,32 @@
-import json
-import re
 import requests
-import logging
-from .base import BaseIntentParser
+import json
 
-logger = logging.getLogger(__name__)
-
-class LocalIntentParser(BaseIntentParser):
-    """Универсальный локальный провайдер (Ollama / OpenAI-compatible)."""
+class LocalIntentParser:
     def __init__(self, base_url="http://localhost:11434/v1", model="llama3"):
         self.base_url = base_url
         self.model = model
 
-    def parse(self, raw_input: str) -> dict:
-        prompt = f"Extract parameters: '{raw_input}'. Return ONLY JSON: {{'action': str, 'amount_usd': int, 'target': str}}"
-        payload = {"model": self.model, "messages": [{"role": "user", "content": prompt}], "temperature": 0}
+    def parse(self, text):
+        # Существующая логика парсинга интента
+        prompt = f"Извлеки интент из текста в формате JSON (action, amount_usd, target). Текст: {text}"
+        return self._call_ollama(prompt, is_json=True)
+
+    def generate_summary(self, content):
+        """Метод для интеллектуального сжатия текстов."""
+        prompt = f"Проанализируй следующие заметки. Удали повторы, выдели ключевые концепты и сформируй структурированный отчет: \n\n{content}"
+        return self._call_ollama(prompt, is_json=False)
+
+    def _call_ollama(self, prompt, is_json=False):
         try:
-            response = requests.post(f"{self.base_url}/chat/completions", json=payload, timeout=10)
-            content = response.json()['choices'][0]['message']['content']
-            match = re.search(r'\{.*\}', content, re.DOTALL)
-            if match: return json.loads(match.group())
-        except Exception as e:
-            logger.error(f"[VIKI] Local Provider Error: {e}")
-        return {"action": "AMBIGUOUS", "amount_usd": 0, "target": "UNKNOWN"}
+            payload = {
+                "model": self.model,
+                "messages": [{"role": "user", "content": prompt}],
+                "stream": False
+            }
+            if is_json: payload["response_format"] = {"type": "json_object"}
+            
+            resp = requests.post(f"{self.base_url}/chat/completions", json=payload)
+            result = resp.json()['choices'][0]['message']['content']
+            return json.loads(result) if is_json else result
+        except:
+            return {"action": "error"} if is_json else "Ошибка связи с мозгом ИИ."
