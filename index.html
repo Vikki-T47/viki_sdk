@@ -12,7 +12,6 @@
     <!-- TOP HEADER -->
     <header class="viki-nav-top">
         <div class="header-inner">
-            <!-- Свободное позиционирование через Flex-пропорции -->
             <div class="nav-side-container left">
                 <div class="nav-side-text brand-green">V.I.K.I. // RSA_CORE</div>
             </div>
@@ -26,8 +25,8 @@
                 <div class="nav-block dropdown">
                     <span class="kofi-text">SUPPORT_RESEARCH ▾</span>
                     <div class="dropdown-content">
-                        <a href="https://ko-fi.com/vikki_tr">KO-FI_FUNDING</a>
-                        <a href="https://www.linkedin.com/in/vikki-trompak-4213693a0/">LINKEDIN_CONTACT</a>
+                        <a href="https://ko-fi.com/vikki_tr" target="_blank">KO-FI_FUNDING</a>
+                        <a href="https://www.linkedin.com/in/vikki-trompak-4213693a0/" target="_blank">LINKEDIN_CONTACT</a>
                     </div>
                 </div>
             </nav>
@@ -40,7 +39,7 @@
 
     <main class="viewport-container">
         
-        <!-- HERO -->
+        <!-- HERO SECTION -->
         <section class="hero-section">
             <div class="floating-logo-container">
                 <img src="logo.png" alt="V.I.K.I." class="main-logo float-anim">
@@ -93,7 +92,7 @@
             </div>
         </section>
 
-        <!-- DOCUMENTATION (Updated label) -->
+        <!-- DOCUMENTATION -->
         <section id="docs" class="portal-section">
             <div class="portal-border">
                 <div class="portal-title">DOCUMENTATION</div>
@@ -110,7 +109,6 @@
                         <span class="p-tag">[REF_01]</span>
                         <h3>TECHNICAL_REFERENCE</h3>
                     </a>
-                    <!-- ATLAS CARD: ORANGE ACCENT -->
                     <a href="https://github.com/Vikki-T47/viki_sdk/tree/main/audits" class="portal-card highlighted-orange">
                         <span class="p-tag-orange">[LIVE_LOG]</span>
                         <h3>ATLAS_OF_HALLUCINATIONS</h3>
@@ -126,18 +124,22 @@
             </a>
         </section>
 
-        <!-- CODE WINDOW -->
+        <!-- CODE WINDOW WITH SYNTAX HIGHLIGHTING -->
         <section class="code-section">
             <div class="code-window">
                 <div class="code-header">
-                    <div class="dots"><span></span><span></span><span></span></div>
+                    <div class="dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
                     <div class="file-name">viki_integration.py</div>
                 </div>
                 <div class="code-body">
-                    <pre><code><span class="c-purple">@enforce_boundary</span>(viki_instance=viki)
-<span class="c-blue">def</span> <span class="c-yellow">execute_transaction</span>(intent):
-    <span class="c-gray"># Protected by Deterministic Law</span>
-    <span class="c-purple">return</span> <span class="c-green">"Success_Authorized"</span></code></pre>
+                    <pre><code><span class="token-decorator">@enforce_boundary</span>(viki_instance=viki)
+<span class="token-keyword">def</span> <span class="token-function">execute_transaction</span>(intent):
+    <span class="token-comment"># Protected by Deterministic Law</span>
+    <span class="token-keyword">return</span> <span class="token-string">"Success_Authorized"</span></code></pre>
                 </div>
             </div>
         </section>
