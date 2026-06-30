@@ -69,6 +69,7 @@ def transfer_funds(intent_text):
 > "A correct answer that is not synchronized with reality is not a result. It is an operational failure." — *Gravity of Contact Manifesto.*
 
 ---
+
 **Support:** (https://ko-fi.com/vikki_tr)
 **Architect:** [Viktor Trompak](https://www.linkedin.com/in/vikki-trompak-4213693a0/)    
 **Web:** [Landing Page](https://vikki-t47.github.io/viki_sdk/)

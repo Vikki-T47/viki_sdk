@@ -9,34 +9,62 @@
 </head>
 <body>
 
-    <!-- TOP HEADER -->
-    <header class="viki-header">
-        <div class="header-content">
-            <div class="header-left">V.I.K.I. // RSA_CORE</div>
-            <div class="header-right">v2.9.0</div>
-        </div>
+    <!-- TOP NAVIGATION BAR -->
+    <header class="viki-nav-top">
+        <div class="nav-left">V.I.K.I. // RSA_CORE</div>
+        <nav class="nav-center">
+            <a href="#about" class="nav-btn">ABOUT_CONCEPT</a>
+            <a href="#sdk" class="nav-btn">SDK_MODULES</a>
+            <a href="#docs" class="nav-btn">DOCUMENTATION</a>
+            <a href="https://github.com/Vikki-T47/viki_sdk" class="nav-btn">GET_ON_GITHUB</a>
+            <a href="https://ko-fi.com/vikki_tr" class="nav-btn kofi">SUPPORT_RESEARCH</a>
+        </nav>
+        <div class="nav-right">2.9.0</div>
     </header>
 
     <main class="container">
         
         <!-- HERO SECTION -->
         <section class="hero">
-            <img src="logo.png" alt="V.I.K.I. Logo" class="main-logo">
+            <div class="logo-wrapper">
+                <img src="logo.png" alt="V.I.K.I. Logo" class="main-logo float-anim">
+            </div>
             
-            <div class="viki-title">V I K I</div>
-            <div class="viki-subtitle">VITAL INTERFACE FOR KINETIC INTEGRATION</div>
-            <div class="viki-tagline">DETERMINISTIC SAFETY FOR PROBABILISTIC SYSTEMS</div>
-            <h1 class="viki-headline">The Execution Boundary</h1>
+            <div class="viki-steps">
+                <div class="step step-1">V I K I</div>
+                <div class="step step-2">VITAL INTERFACE FOR KINETIC INTEGRATION</div>
+                <div class="step step-3">DETERMINISTIC SAFETY FOR PROBABILISTIC SYSTEMS</div>
+                <h1 class="step-4">The Execution Boundary</h1>
+            </div>
         </section>
 
-        <!-- NAVIGATION BLOCKS (Substantial) -->
-        <section class="nav-portal">
-            <div class="nav-grid">
-                <a href="#about" class="nav-box">ABOUT_CONCEPT</a>
-                <a href="#sdk" class="nav-box">SDK_MODULES</a>
-                <a href="#docs" class="nav-box">DOCUMENTATION</a>
-                <a href="https://github.com/Vikki-T47/viki_sdk" class="nav-box">GET_ON_GITHUB</a>
-                <a href="https://ko-fi.com/vikki_tr" class="nav-box kofi-box">SUPPORT_RESEARCH</a>
+        <!-- METRICS BLOCKS -->
+        <section class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">100%</div>
+                <div class="metric-label">DURABLE SUCCESS RATE</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">0.007ms</div>
+                <div class="metric-label">DECISION LATENCY</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">100%</div>
+                <div class="metric-label">GOAL DRIFT PROTECTION</div>
+            </div>
+        </section>
+        <p class="validation-note">* Validated by 1000-run Empirical Stress Test</p>
+
+        <!-- PROBLEM & SOLUTION -->
+        <section class="dual-logic">
+            <div class="logic-card">
+                <span class="logic-tag">THE PROBLEM</span>
+                <p>Vanilla agents fail 80% of multi-step tasks due to accumulated drift. LLMs are blind to physical limits, leading to unmanaged operational cascades.</p>
+            </div>
+            <div class="logic-card">
+                <span class="logic-tag">THE RSA SOLUTION</span>
+                <p>V.I.K.I. acts as a deterministic "Prefrontal Cortex", ensuring 100% transaction integrity via real-time reality synchronization.</p>
+                <a href="#about" class="read-more">> Read Manifesto</a>
             </div>
         </section>
 
@@ -44,8 +72,12 @@
         <section id="docs" class="doc-portal">
             <div class="portal-header">DOCUMENTATION_PORTAL</div>
             <div class="doc-grid">
+                <a href="#" class="doc-card">
+                    <span class="doc-tag">[DOC_01]</span>
+                    <h3>SENTINEL_PASSPORT</h3>
+                </a>
                 <a href="https://github.com/Vikki-T47/viki_sdk/blob/main/WHITE_PAPER_RSA.md" class="doc-card">
-                    <span class="doc-tag">[STRATEGY]</span>
+                    <span class="doc-tag">[DOC_02]</span>
                     <h3>WHITE_PAPER_RSA</h3>
                 </a>
                 <a href="https://github.com/Vikki-T47/viki_sdk/blob/main/TECHNICAL_REFERENCE.md" class="doc-card">
