@@ -9,10 +9,13 @@
 </head>
 <body>
 
-    <!-- TOP HEADER WITH ALIGNED NAVIGATION -->
+    <!-- TOP HEADER -->
     <header class="viki-nav-top">
         <div class="header-inner">
-            <div class="nav-side-text brand-green">V.I.K.I. // RSA_CORE</div>
+            <!-- Свободное позиционирование через Flex-пропорции -->
+            <div class="nav-side-container left">
+                <div class="nav-side-text brand-green">V.I.K.I. // RSA_CORE</div>
+            </div>
             
             <nav class="nav-center-group">
                 <a href="https://github.com/Vikki-T47" class="nav-block">ABOUT_CONCEPT</a>
@@ -29,13 +32,15 @@
                 </div>
             </nav>
             
-            <div class="nav-side-text version-blue">v2.9.0</div>
+            <div class="nav-side-container right">
+                <div class="nav-side-text version-blue">v2.9.0</div>
+            </div>
         </div>
     </header>
 
     <main class="viewport-container">
         
-        <!-- HERO SECTION -->
+        <!-- HERO -->
         <section class="hero-section">
             <div class="floating-logo-container">
                 <img src="logo.png" alt="V.I.K.I." class="main-logo float-anim">
@@ -88,10 +93,10 @@
             </div>
         </section>
 
-        <!-- DOCUMENTATION -->
+        <!-- DOCUMENTATION (Updated label) -->
         <section id="docs" class="portal-section">
             <div class="portal-border">
-                <div class="portal-title">DOCUMENTATION_PORTAL</div>
+                <div class="portal-title">DOCUMENTATION</div>
                 <div class="portal-grid">
                     <a href="https://github.com/Vikki-T47/viki_sdk/blob/main/SENTINEL_SPECIFICATION.md" class="portal-card">
                         <span class="p-tag">[DOC_01]</span>
@@ -105,8 +110,9 @@
                         <span class="p-tag">[REF_01]</span>
                         <h3>TECHNICAL_REFERENCE</h3>
                     </a>
-                    <a href="https://github.com/Vikki-T47/viki_sdk/tree/main/audits" class="portal-card highlighted">
-                        <span class="p-tag">[LIVE_LOG]</span>
+                    <!-- ATLAS CARD: ORANGE ACCENT -->
+                    <a href="https://github.com/Vikki-T47/viki_sdk/tree/main/audits" class="portal-card highlighted-orange">
+                        <span class="p-tag-orange">[LIVE_LOG]</span>
                         <h3>ATLAS_OF_HALLUCINATIONS</h3>
                     </a>
                 </div>
