@@ -5,120 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>V.I.K.I. // RSA_CORE</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- TOP NAVIGATION BAR -->
+    <!-- TOP HEADER -->
     <header class="viki-nav-top">
-        <div class="nav-left">V.I.K.I. // RSA_CORE</div>
+        <div class="nav-side-text">V.I.K.I. // RSA_CORE</div>
         
-        <nav class="nav-center">
-            <a href="https://github.com/Vikki-T47" class="nav-btn">ABOUT_CONCEPT</a>
-            <a href="https://leanpub.com/gravity-of-contact" class="nav-btn">MANIFESTO</a>
-            <a href="#docs" class="nav-btn">DOCUMENTATION</a>
-            <a href="https://github.com/Vikki-T47/viki_sdk" class="nav-btn">GET_ON_GITHUB</a>
+        <nav class="nav-center-group">
+            <a href="https://github.com/Vikki-T47" class="nav-block">ABOUT_CONCEPT</a>
+            <a href="https://leanpub.com/gravity-of-contact" class="nav-block">MANIFESTO</a>
+            <a href="#docs" class="nav-block">DOCUMENTATION</a>
+            <a href="https://github.com/Vikki-T47/viki_sdk" class="nav-block">GET_ON_GITHUB</a>
             
-            <div class="dropdown">
-                <button class="nav-btn kofi-trigger">SUPPORT_RESEARCH ▾</button>
+            <div class="nav-block dropdown">
+                <span class="kofi-text">SUPPORT_RESEARCH ▾</span>
                 <div class="dropdown-content">
-                    <a href="https://ko-fi.com/vikki_tr" target="_blank">KO-FI_FUNDING</a>
-                    <a href="https://www.linkedin.com/in/vikki-trompak-4213693a0/" target="_blank">LINKEDIN_CONTACT</a>
+                    <a href="https://ko-fi.com/vikki_tr">KO-FI_FUNDING</a>
+                    <a href="https://www.linkedin.com/in/vikki-trompak-4213693a0/">LINKEDIN_CONTACT</a>
                 </div>
             </div>
         </nav>
         
-        <div class="nav-right">2.9.3</div>
+        <div class="nav-side-text version">v2.9.0</div>
     </header>
 
-    <main class="container">
+    <main class="viewport-container">
         
-        <!-- HERO SECTION -->
-        <section class="hero">
-            <div class="logo-wrapper">
-                <img src="logo.png" alt="V.I.K.I. Logo" class="main-logo float-anim">
+        <!-- HERO -->
+        <section class="hero-section">
+            <div class="floating-logo-container">
+                <img src="logo.png" alt="V.I.K.I." class="main-logo float-anim">
             </div>
             
-            <!-- PERSPECTIVE STEPS (STAR WARS STYLE) -->
-            <div class="viki-perspective-box">
-                <div class="p-step p-1">V I K I</div>
-                <div class="p-step p-2">VITAL INTERFACE FOR KINETIC INTEGRATION</div>
-                <div class="p-step p-3">DETERMINISTIC SAFETY FOR PROBABILISTIC SYSTEMS</div>
-                <h1 class="p-step p-4">The Execution Boundary</h1>
+            <div class="viki-title-stack">
+                <div class="v-step v-1">V I K I</div>
+                <div class="v-step v-2">VITAL INTERFACE FOR KINETIC INTEGRATION</div>
+                <div class="v-step v-3">DETERMINISTIC SAFETY FOR PROBABILISTIC SYSTEMS</div>
+                <h1 class="v-step v-4">The Execution Boundary</h1>
             </div>
 
-            <!-- ACTION BUTTONS -->
-            <div class="hero-actions">
-                <a href="https://github.com/Vikki-T47/viki_sdk" class="action-btn">SDK_MODULES</a>
-                <a href="https://www.linkedin.com/in/vikki-trompak-4213693a0/" class="action-btn ghost">REQUEST_AUDIT</a>
+            <!-- BUTTONS FROM REFERENCE -->
+            <div class="hero-action-buttons">
+                <a href="https://github.com/Vikki-T47/viki_sdk" class="btn-ref white-btn">GET_SDK_ON_GITHUB</a>
+                <a href="https://www.linkedin.com/in/vikki-trompak-4213693a0/" class="btn-ref ghost-btn">REQUEST_AUDIT</a>
             </div>
         </section>
 
-        <!-- METRICS BLOCKS -->
-        <section class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-value">100%</div>
-                <div class="metric-label">DURABLE SUCCESS RATE</div>
+        <!-- THREE MASSIVE METRIC BLOCKS -->
+        <section class="metrics-section">
+            <div class="m-grid">
+                <div class="m-card">
+                    <div class="m-num">100%</div>
+                    <div class="m-label">DURABLE SUCCESS RATE</div>
+                </div>
+                <div class="m-card">
+                    <div class="m-num">0.007ms</div>
+                    <div class="m-label">DECISION LATENCY</div>
+                </div>
+                <div class="m-card">
+                    <div class="m-num">100%</div>
+                    <div class="m-label">GOAL DRIFT PROTECTION</div>
+                </div>
             </div>
-            <div class="metric-card">
-                <div class="metric-value">0.007ms</div>
-                <div class="metric-label">DECISION LATENCY</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">100%</div>
-                <div class="metric-label">GOAL DRIFT PROTECTION</div>
-            </div>
+            <p class="m-sub">* Validated by 1000-run Empirical Stress Test</p>
         </section>
-        <p class="validation-note">* Validated by 1000-run Empirical Stress Test</p>
 
         <!-- PROBLEM & SOLUTION -->
-        <section class="dual-logic">
-            <div class="logic-card">
-                <span class="logic-tag">THE PROBLEM</span>
-                <p>Vanilla agents fail 80% of multi-step tasks due to accumulated drift. LLMs are blind to physical limits, leading to unmanaged operational cascades.</p>
-            </div>
-            <div class="logic-card">
-                <span class="logic-tag">THE RSA SOLUTION</span>
-                <p>V.I.K.I. acts as a deterministic "Prefrontal Cortex", ensuring 100% transaction integrity via real-time reality synchronization.</p>
-                <a href="https://leanpub.com/gravity-of-contact" class="read-more">> Read Manifesto</a>
+        <section class="logic-section">
+            <div class="logic-grid">
+                <div class="logic-box">
+                    <h4>THE PROBLEM</h4>
+                    <p>Vanilla agents fail 80% of multi-step tasks due to accumulated drift. LLMs are blind to physical limits, leading to unmanaged operational cascades.</p>
+                </div>
+                <div class="logic-box">
+                    <h4>THE RSA SOLUTION</h4>
+                    <p>V.I.K.I. acts as a deterministic "Prefrontal Cortex", ensuring 100% transaction integrity via real-time reality synchronization.</p>
+                    <a href="https://leanpub.com/gravity-of-contact" class="manifesto-link">> Read Manifesto</a>
+                </div>
             </div>
         </section>
 
         <!-- DOCUMENTATION PORTAL -->
-        <section id="docs" class="doc-portal">
-            <div class="portal-header">DOCUMENTATION_PORTAL</div>
-            <div class="doc-grid">
-                <a href="https://github.com/Vikki-T47/viki_sdk/blob/main/SENTINEL_SPECIFICATION.md" class="doc-card">
-                    <span class="doc-tag">[DOC_01]</span>
-                    <h3>SENTINEL_PASSPORT</h3>
-                </a>
-                <a href="https://github.com/Vikki-T47/viki_sdk/blob/main/WHITE_PAPER_RSA.md" class="doc-card">
-                    <span class="doc-tag">[DOC_02]</span>
-                    <h3>WHITE_PAPER_RSA</h3>
-                </a>
-                <a href="https://github.com/Vikki-T47/viki_sdk/blob/main/TECHNICAL_REFERENCE.md" class="doc-card">
-                    <span class="doc-tag">[REF_01]</span>
-                    <h3>TECHNICAL_REFERENCE</h3>
-                </a>
-                <a href="https://github.com/Vikki-T47/viki_sdk/tree/main/audits" class="doc-card highlighted">
-                    <span class="doc-tag">[LIVE_LOG]</span>
-                    <h3>ATLAS_OF_HALLUCINATIONS</h3>
-                </a>
+        <section id="docs" class="portal-section">
+            <div class="portal-border">
+                <div class="portal-title">DOCUMENTATION_PORTAL</div>
+                <div class="portal-grid">
+                    <a href="https://github.com/Vikki-T47/viki_sdk/blob/main/SENTINEL_SPECIFICATION.md" class="portal-card">
+                        <span class="p-tag">[DOC_01]</span>
+                        <h3>SENTINEL_PASSPORT</h3>
+                    </a>
+                    <a href="https://github.com/Vikki-T47/viki_sdk/blob/main/WHITE_PAPER_RSA.md" class="portal-card">
+                        <span class="p-tag">[DOC_02]</span>
+                        <h3>WHITE_PAPER_RSA</h3>
+                    </a>
+                    <a href="https://github.com/Vikki-T47/viki_sdk/blob/main/TECHNICAL_REFERENCE.md" class="portal-card">
+                        <span class="p-tag">[REF_01]</span>
+                        <h3>TECHNICAL_REFERENCE</h3>
+                    </a>
+                    <a href="https://github.com/Vikki-T47/viki_sdk/tree/main/audits" class="portal-card highlighted">
+                        <span class="p-tag">[LIVE_LOG]</span>
+                        <h3>ATLAS_OF_HALLUCINATIONS</h3>
+                    </a>
+                </div>
             </div>
         </section>
 
-        <!-- SUPPORT FOOTER BLOCK (Stayed Blue) -->
-        <section class="support-section">
-            <div class="support-wrapper">
-                <a href="https://ko-fi.com/vikki_tr" class="kofi-banner">
-                    🛰️ SUPPORT THE RESEARCH
-                </a>
-            </div>
+        <!-- SUPPORT BLOCK (STATIC BLUE) -->
+        <section class="support-footer">
+            <a href="https://ko-fi.com/vikki_tr" class="kofi-link">
+                🛰️ SUPPORT THE RESEARCH
+            </a>
         </section>
 
     </main>
 
-    <footer>
+    <footer class="main-footer">
         <p>BUILD: 2026_STABLE // ARCHITECT: VIKTOR TROMPAK</p>
         <p>"Deterministic Law for Probabilistic Minds"</p>
     </footer>
