@@ -38,4 +38,4 @@
 
 ---
 **Last Sync:** 2026-07-10 03:40:00  
-**Architect:** [Viktor Trompak]
+**Architect:** [Viktor Trompak](https://www.linkedin.com/in/vikki-trompak-4213693a0/)
