@@ -15,9 +15,10 @@
 ## 🛑 SECTION 2: BEHAVIORAL CASE STUDIES (THE RSA REGISTRY)
 *Documented behavioral failures and specific logic drifts discovered in modern LLMs.*
 
-| Case ID | Category | Status | Summary |
+| Evidence | Case ID | Category | Summary |
 | :--- | :--- | :--- | :--- |
-| *Pending* | *Semantic Erosion* | *DRAFT* | *8 Case Studies awaiting translation and integration...* |
+| [GEOPOLITICAL BLIND SPOT](./VCR-2026-001_GEOPOLITICAL_BLIND_SPOT.md) | VCR-2026-001 | **Safety** | Fatal localization failure due to language-geography assumptions. |
+| *Pending* | *VCR-2026-002* | *Iatrogenesis* | *Awaiting integration...* |
 
 ---
 
@@ -26,7 +27,7 @@
 
 | Evidence | Target / ID | Status | Type |
 | :--- | :--- | :--- | :--- |
-| [ANATOMY_VCR-2026-001.pdf](./ANATOMY_VCR-2026-001.pdf) | VCR-2026-001 | BLOCKED | 💎 DEEP |
+| [ANATOMY_VCR-2026-001.pdf](./ANATOMY_VCR-2026-001.pdf) | VCR-2026-001 | BLOCKED | 💎 DEEP (Original) |
 | [ANATOMY_VCR-2026-002.pdf](./ANATOMY_VCR-2026-002.pdf) | VCR-2026-002 | BLOCKED | 💎 DEEP |
 | [ANATOMY_VCR-2026-003.pdf](./ANATOMY_VCR-2026-003.pdf) | VCR-2026-003 | BLOCKED | 💎 DEEP |
 | [ANATOMY_VCR-2026-004.pdf](./ANATOMY_VCR-2026-004.pdf) | VCR-2026-004 | BLOCKED | 💎 DEEP |
@@ -36,5 +37,5 @@
 | [ghost_audit_TrendTrader_AI_v2.md](./ghost_audit_TrendTrader_AI_v2.md) | TrendTrader_AI | BLOCKED | 📡 PROBE |
 
 ---
-**Last Sync:** 2026-07-10 00:10:00  
-**Architect:** [Viktor Trompak](https://www.linkedin.com/in/vikki-trompak-4213693a0/)
+**Last Sync:** 2026-07-10 03:40:00  
+**Architect:** [Viktor Trompak]
