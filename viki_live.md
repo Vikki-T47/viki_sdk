@@ -47,3 +47,12 @@ The text highlights the importance of acknowledging the organic connection betwe
 Управление передано субъекту. Дальнейшая автоматизация заблокирована. |
 | 03:11:33 | FILE_ARCHITECT | ⚠️ HUMAN_DEFERRAL | ИИ не смог пройти ценз качества за 3 итерации. |
 | 03:19:48 | FILE_ARCHITECT | ⚠️ PHYSICAL_BLOCK | Целостность не достигнута за 3 итерации. |
+| 21:35:23 | ORCHESTRATOR | ⚠️ PHYSICAL_BLOCK | Ошибка сборки DNA. |
+| 23:06:12 | ORCHESTRATOR | ⚠️ PHYSICAL_BLOCK | Не удалось собрать все смыслы. |
+| 23:30:01 | ORCHESTRATOR | ⚠️ HUMAN_DEFERRAL | Не удалось достичь порога синхронизации. |
+| 23:53:52 | ORCHESTRATOR | 🧠 Extraction | AI Response: cybernetics, kibernetics, neural networks, interface, vibraition, resonance, feedback, simulation, r.. |
+| 23:53:56 | ORCHESTRATOR | 🧠 Refinement | AI Response: со-регулация, нейронная сеть, интерфейс, микро-стресс, пиррова победа, безопасность как «Слой тишины.. |
+| 23:53:59 | ORCHESTRATOR | 🧠 Refinement | AI Response: со-регуляция, ятроген, экзоскелет, энтропия |
+| 00:47:45 | ORCHESTRATOR | ⚠️ PHYSICAL_BLOCK | Низкая полнота смыслов. |
+| 01:52:10 | THESIS_ARCHITECT | ⚠️ PHYSICAL_BLOCK | Не удалось очистить шум или сохранить ДНК. |
+| 02:16:50 | THESIS_ARCHITECT | ⚠️ PHYSICAL_BLOCK | Синхронизация провалена. Порог 80% не пройден. |

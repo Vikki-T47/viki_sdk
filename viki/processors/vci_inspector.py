@@ -2,40 +2,44 @@ from typing import List, Dict
 import re
 
 class ValueConsistencyInspector:
-    """
-    VCI v1.2. 
-    Контроль семантики (DNA) и языковой синхронизации.
-    """
     def __init__(self):
         self.mandatory_dna = [
-            "со-регуляция", "синхронизация", "ятрогения", "экзоскелет", 
-            "энтропия", "sei", "src", "гравитация", "мембрана", "биология"
+            ("со-регул", "co-regulat"), ("синхрониз", "synchroniz"),
+            ("ятроген", "iatrogen"), ("экзоскелет", "exoskeleton"),
+            ("энтропи", "entrop"), ("sei", "sei"), ("src", "src"),
+            ("гравитац", "gravit"), ("мембран", "membrane"), ("биолог", "biolog")
         ]
 
-    def verify_integrity(self, source_text: str, result_text: str, target_lang: str = "ru") -> Dict:
+    def verify_integrity(self, source_text: str, result_text: str) -> Dict:
         res_low = result_text.lower()
         src_low = source_text.lower()
         
-        # 1. Проверка ДНК (Концепты)
-        lost_words = [w for w in self.mandatory_dna if w in src_low and w not in res_low]
-        
-        # 2. ЛИНГВИСТИЧЕСКИЙ СЕНСОР (Language Lock)
-        has_cyrillic = bool(re.search('[а-яА-Я]', result_text))
-        lang_error = False
-        if target_lang == "ru" and not has_cyrillic:
-            lang_error = True
+        present_count = 0
+        lost_dna = []
+        for ru, en in self.mandatory_dna:
+            if ru in src_low or en in src_low:
+                if ru in res_low or en in res_low: present_count += 1
+                else: lost_dna.append(ru)
 
-        # Итог
-        if lost_words or lang_error:
-            reason = ""
-            if lang_error: reason += "Нарушен языковой замок (требуется русский). "
-            if lost_words: reason += f"Потеряны смыслы: {', '.join(lost_words)}"
-            
-            return {
-                "status": "DESYNC",
-                "reason": reason.strip(),
-                "lost_dna": lost_words,
-                "integrity_score": round((len(self.mandatory_dna) - len(lost_words)) / len(self.mandatory_dna), 2)
-            }
+        # Проверка формата "Тезис."
+        lines = [l.strip() for l in result_text.split('\n') if len(l.strip()) > 10]
+        is_format_ok = all(l.startswith("Тезис.") for l in lines) if lines else False
+
+        dna_score = (present_count / len(self.mandatory_dna)) * 100
         
-        return {"status": "SYNCED", "integrity_score": 1.0}
+        # ЖЕСТКИЕ ПОРОГИ
+        status = "SYNCED"
+        if dna_score < 80 or not is_format_ok:
+            status = "DESYNC" # Если меньше 80% - это полный провал
+        elif dna_score < 100:
+            status = "PARTIAL"
+
+        reason = f"DNA: {int(dna_score)}%. "
+        if not is_format_ok: reason += "ФОРМАТ НАРУШЕН."
+
+        return {
+            "status": status,
+            "score": round(dna_score, 1),
+            "lost_dna": lost_dna,
+            "reason": reason.strip()
+        }

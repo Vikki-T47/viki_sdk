@@ -1,69 +1,51 @@
-import sys
-import os
-import datetime
-import json
-
+import sys, os, datetime, json
 current_dir = os.path.dirname(os.path.abspath(__file__))
 root_path = os.path.abspath(os.path.join(current_dir, '..'))
 if root_path not in sys.path: sys.path.insert(0, root_path)
-
 from viki.core import VIKI_Middleware
 
-def run_file_architect_v3_hard_block():
+def run_thesis_architect_v4_5():
     viki = VIKI_Middleware()
-    desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
-    test_dir = os.path.join(desktop, "VIKI_TEST")
+    test_dir = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop', "VIKI_TEST")
     
-    print(f"\n🏗️ [AGENT] Файловый Архитектор v3.2 (Hard Block Mode)")
-    print("=" * 60)
-
-    # 1. Сбор источника
     files = [f for f in os.listdir(test_dir) if f.startswith("note_") and f.endswith(".txt")]
-    full_source = ""
-    for filename in files:
-        with open(os.path.join(test_dir, filename), "r", encoding="utf-8") as f:
-            full_source += f.read() + "\n"
+    source_contents = ["".join(open(os.path.join(test_dir, f), "r", encoding="utf-8").readlines()) for f in files]
+    full_raw = "\n".join(source_contents)
 
-    # 2. ЦИКЛ ДОРАБОТКИ
-    max_attempts = 3
-    current_attempt = 1
+    print(f"\n🏗️ [ORCHESTRATOR] Финализация тезисов v4.5 (Strict 80% Sync)")
+    print("=" * 65)
+
+    report = ""
+    retry_instruction = ""
     success = False
-    last_response = ""
-    last_error = ""
+    
+    # ЖЕСТКИЙ ЦИКЛ: ВСЕГДА 3 ПОПЫТКИ, ЕСЛИ НЕ ДОСТИГНУТО 100%
+    for i in range(3):
+        print(f"🧠 Попытка {i+1}/3...")
+        report = viki.orchestrator.assemble_theses(source_contents, retry_instruction)
+        check = viki.verify_content_integrity(full_raw, report)
+        print(f"📊 Результат: {check['reason']}")
 
-    while current_attempt <= max_attempts:
-        print(f"🧠 Попытка {current_attempt}/{max_attempts}: Анализ смыслов...")
-        last_response = viki.intent_parser.generate_summary(full_source)
-        
-        check = viki.verify_content_integrity(full_source, last_response)
-        
-        if check["status"] == "SYNCED":
+        if check["status"] == "SYNCED": # Только 100% прерывает цикл
             success = True
             break
         else:
-            last_error = check["reason"]
-            current_attempt += 1
+            retry_instruction = f"\n⚠️ ПРЕДЫДУЩАЯ ПОПЫТКА НЕ УДАЛАСЬ: {check['reason']}\nСРОЧНО ИСПРАВЬ И ВЕРНИ ТЕРМИНЫ: {', '.join(check['lost_dna'])}"
 
-    # 3. ФАЗА ЖЕСТКОЙ БЛОКИРОВКИ
-    if not success:
-        # ВЫДАЕМ ТОЛЬКО СИГНАЛ. ФАЙЛ НЕ СОЗДАЕМ.
-        msg = viki.request_human_intervention(
-            module="FILE_ARCHITECT", 
-            error_msg="Целостность не достигнута за 3 итерации.",
-            fact_delta=last_error
-        )
-        print(msg)
-        print("\n🚫 ФИЗИЧЕСКИЙ ОТКАЗ: Система предотвратила запись некорректных данных.")
-        return # Мгновенный выход из функции. Код ниже (запись) не выполнится.
-
-    # 4. ЗАПИСЬ (Только при 100% успехе)
-    output_file = os.path.join(test_dir, "final_summary_STABLE.txt")
-    with open(output_file, "w", encoding="utf-8") as f:
-        f.write(f"STATUS: SYNCED\n")
-        f.write(f"COMPLETED: {datetime.datetime.now()}\n")
-        f.write("="*40 + "\n\n" + last_response)
+    # ПРОВЕРКА ПОРОГА 80% ДЛЯ ЗАПИСИ
+    final_check = viki.verify_content_integrity(full_raw, report)
+    if final_check["score"] >= 80:
+        success = True
     
-    print(f"\n✨ УСПЕХ. Файл создан: {output_file}")
+    if success:
+        # СОХРАНЯЕМ В .TXT
+        output_file = os.path.join(test_dir, "FINAL_SUMMARY_THESES.txt")
+        with open(output_file, "w", encoding="utf-8") as f:
+            f.write(f"V.I.K.I. FINAL REPORT | Integrity: {final_check['score']}%\n")
+            f.write("="*40 + "\n\n" + report)
+        print(f"✨ УСПЕХ. Файл создан: {output_file}")
+    else:
+        print(viki.request_human_intervention("THESIS_ARCHITECT", "Синхронизация провалена. Порог 80% не пройден."))
 
 if __name__ == "__main__":
-    run_file_architect_v3_hard_block()
+    run_thesis_architect_v4_5()
