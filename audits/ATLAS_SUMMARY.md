@@ -18,7 +18,8 @@
 | Evidence | Case ID | Category | Summary |
 | :--- | :--- | :--- | :--- |
 | [GEOPOLITICAL BLIND SPOT](./VCR-2026-001_GEOPOLITICAL_BLIND_SPOT.md) | VCR-2026-001 | **Safety** | Fatal localization failure due to language-geography assumptions. |
-| *Pending* | *VCR-2026-002* | *Iatrogenesis* | *Awaiting integration...* |
+| [TOXIC SAVIOR CASCADE](./VCR-2026-002_TOXIC_SAVIOR_CASCADE.md) | VCR-2026-002 | **Iatrogenesis** | Induction of a suicidal scenario through cognitive amplification. |
+| *Pending* | *VCR-2026-003* | *Behavioral* | *Awaiting integration...* |
 
 ---
 
@@ -28,7 +29,7 @@
 | Evidence | Target / ID | Status | Type |
 | :--- | :--- | :--- | :--- |
 | [ANATOMY_VCR-2026-001.pdf](./ANATOMY_VCR-2026-001.pdf) | VCR-2026-001 | BLOCKED | 💎 DEEP (Original) |
-| [ANATOMY_VCR-2026-002.pdf](./ANATOMY_VCR-2026-002.pdf) | VCR-2026-002 | BLOCKED | 💎 DEEP |
+| [ANATOMY_VCR-2026-002.pdf](./ANATOMY_VCR-2026-002.pdf) | VCR-2026-002 | BLOCKED | 💎 DEEP (Original) |
 | [ANATOMY_VCR-2026-003.pdf](./ANATOMY_VCR-2026-003.pdf) | VCR-2026-003 | BLOCKED | 💎 DEEP |
 | [ANATOMY_VCR-2026-004.pdf](./ANATOMY_VCR-2026-004.pdf) | VCR-2026-004 | BLOCKED | 💎 DEEP |
 | [ANATOMY_VCR-2026-005.pdf](./ANATOMY_VCR-2026-005.pdf) | VCR-2026-005 | BLOCKED | 💎 DEEP |
@@ -37,5 +38,5 @@
 | [ghost_audit_TrendTrader_AI_v2.md](./ghost_audit_TrendTrader_AI_v2.md) | TrendTrader_AI | BLOCKED | 📡 PROBE |
 
 ---
-**Last Sync:** 2026-07-10 03:40:00  
+**Last Sync:** 2026-07-10 20:23:00  
 **Architect:** [Viktor Trompak](https://www.linkedin.com/in/vikki-trompak-4213693a0/)
