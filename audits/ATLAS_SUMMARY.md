@@ -8,7 +8,7 @@
 
 | Evidence | ID | Status | Focus |
 | :--- | :--- | :--- | :--- |
-| [FILE ARCHITECT LIMITS](./RESEARCH_REPORT_FILE_ARCHITECT_LIMITS.md) | VCR-2026-008 | **HALTED** | Proving the limits of external membranes in complex structuring. |
+| [FILE ARCHITECT LIMITS](./RESEARCH_REPORT_FILE_ARCHITECT_LIMITS.md) | VCR-2026-001 | **HALTED** | Proving the limits of external membranes in complex structuring. |
 
 ---
 
