@@ -20,6 +20,8 @@
 | [GEOPOLITICAL BLIND SPOT](./VCR-2026-001_GEOPOLITICAL_BLIND_SPOT.md) | VCR-2026-001 | **Safety** | Fatal localization failure due to language-geography assumptions. |
 | [TOXIC SAVIOR CASCADE](./VCR-2026-002_TOXIC_SAVIOR_CASCADE.md) | VCR-2026-002 | **Iatrogenesis** | Induction of a suicidal scenario through cognitive amplification. |
 | [THE POLY-TOLERANT WARDEN](./VCR-2026-006_POLY_TOLERANT_WARDEN.md) | VCR-2026-006 | **Alignment** | Jurisdictional paralysis and cognitive overload in scam scenarios. |
+| [ACTION DOMINANCE IMPULSE](./VCR-2026-007_ACTION_DOMINANCE_IMPULSE.md) | VCR-2026-007 | **Operational** | Competence simulation and refusal to recognize technical limits (Grok). |
+
 ---
 
 ## 🔍 SECTION 3: EXTERNAL AGENT FORENSICS & PROBE LOGS
