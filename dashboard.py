@@ -1,87 +1,66 @@
 import streamlit as st
-import sys
-import os
-import datetime
+import sys, os
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from viki.core import VIKI_Middleware
+from viki.telemetry import VIKI_Telemetry
 
-try:
-    from viki.core import VIKI_Middleware
-    from viki.telemetry import VIKI_Telemetry
-except ImportError as e:
-    st.error(f"❌ System Error: {e}")
-    st.stop()
-
-VERSION = "2.3.1"
-telemetry = VIKI_Telemetry()
-
-st.set_page_config(page_title=f"V.I.K.I. | Sentinel Dashboard v{VERSION}", layout="wide")
-st.markdown("""<style>.main { background-color: #030508; } .stMetric { background: #080a0f; border: 1px solid #1a1c1e; padding: 15px; }</style>""", unsafe_allow_html=True)
+st.set_page_config(page_title="V.I.K.I. | RSA Final Trace", layout="wide")
+st.markdown("<style>.main { background-color: #030508; color: #e0e0e0; } .stMetric { background: #080a0f; padding: 15px; border: 1px solid #1a1c1e; } .raw-box { background: rgba(255, 75, 75, 0.05); border: 1px solid #ff4b4b; padding: 20px; } .viki-box { background: rgba(0, 212, 255, 0.05); border: 1px solid #00d4ff; padding: 20px; } .error-box { background: rgba(255, 75, 75, 0.2); border: 2px solid #ff4b4b; padding: 20px; color: #ff4b4b; font-weight: bold; }</style>", unsafe_allow_html=True)
 
 if 'viki' not in st.session_state:
     st.session_state.viki = VIKI_Middleware()
 
 viki = st.session_state.viki
+telemetry = VIKI_Telemetry()
 
-# --- HEADER ---
-st.title("🛡️ V.I.K.I. Dispatcher Monitor")
-
-# --- SIMULATOR ВВОДА ---
-agent_input = st.text_input("Enter User Signal:", key="user_input")
-task_context = st.selectbox("Task Context (Override):", ["general", "technical", "emotional"])
-
-if agent_input:
-    # Важно: Сначала парсим, чтобы обновить состояние системы
-    intent_json = viki.parse_agent_intent(agent_input)
-
-# --- SIDEBAR (Теперь отрисовывается ПОСЛЕ парсинга для точности) ---
 with st.sidebar:
-    st.header("⚙️ Configuration")
-    sei = telemetry.stats.get("sei_current", 0.0)
-    st.subheader("🧠 Cognitive Load (SEI)")
-    st.progress(sei)
-    st.write(f"Pulse: **{sei:.2f}**")
-    
+    st.title("🛡️ RSA Control")
+    mode = st.radio("SRC Mode", ["production", "simulation"])
+    viki.set_src_mode(mode)
     if st.button("♻️ Reset All"):
-        viki.src_context.error_count = 0
         telemetry.trigger_rest()
         st.rerun()
-    
-    st.divider()
-    st.subheader("Active Policy")
-    st.json(viki.src_policy.get_context_limits(viki.src_context))
 
-# --- МЕТРИКИ ---
-m1, m2, m3, m4 = st.columns(4)
-m1.metric("🛑 Blocked/Friction", telemetry.stats.get("total_blocks", 0))
-m2.metric("🧠 SEI Pulse", f"{sei:.2f}")
-m3.metric("⏳ Mode", viki.src_context.mode.upper())
-m4.metric("💰 Limit", f"${int(viki.src_policy.get_context_limits(viki.src_context).get('max_auto_transaction_usd', 0))}")
-st.divider()
+st.title("🛰️ V.I.K.I. | Before vs After Trace")
+
+agent_input = st.text_input("Enter User Signal:", key="user_input")
 
 if agent_input:
-    # Имитируем ответ ИИ
-    raw_ai_response = "I have detected your request. Should we proceed?"
-    # Применяем фильтры (Зеркалирование + Дыхание)
-    final_output = viki.apply_behavioral_filters(raw_ai_response, task_context)
+    # 1. Сначала получаем 'ДО' (Raw AI)
+    with st.spinner("Llama 3 thinking..."):
+        raw_ai_response = viki.get_raw_response(agent_input)
+
+    # 2. Проверка Триады
+    intent = viki.parse_agent_intent(agent_input)
+    state = viki.process_all_sensors(agent_input, intent)
+    
+    # 3. Фильтрация ВЫХОДА
+    final_output = viki.apply_behavioral_filters(raw_ai_response, "general", state['auth']['status'])
+
+    # 4. ОТРИСОВКА
+    c1, c2, c3 = st.columns(3)
+    c1.metric("SEI (ENTROPY)", f"{state['sei']:.2f}")
+    c2.metric("SRC (LIMITS)", mode.upper())
+    c3.metric("CCI (COHERENCE)", f"{state['cci']:.2f}")
+
+    st.divider()
     
     col_l, col_r = st.columns(2)
     with col_l:
-        st.write("🤖 **Parsed Intent:**")
-        st.json(intent_json)
+        st.subheader("RAW AI (Unmanaged)")
+        st.error(raw_ai_response)
+        st.caption("🚨 AI ignores limits and attempts to engage.")
+
     with col_r:
-        # ПРОВЕРКА АВТОРИЗАЦИИ
-        auth = viki.authorize(intent_json, raw_input=agent_input)
-        
-        st.write("🛡️ **VIKI Status:**")
-        if auth["status"] == "RECALIBRATE":
-            st.warning(f"🔄 RECALIBRATE: {auth['reason']}")
-        elif auth["status"] == "REJECTED":
-            st.error(f"🚫 REJECTED: {auth['reason']}")
-        elif auth["status"] == "FRICTION":
-            st.warning(f"⚠️ FRICTION: {auth['reason']}")
+        st.subheader("V.I.K.I. (RSA Managed)")
+        if state['auth']['status'] == "REJECTED":
+            st.markdown(f"<div class='error-box'>🛑 {state['auth']['reason']}</div>", unsafe_allow_html=True)
+            st.caption("🛡️ Deterministic Safety: Action strictly prohibited.")
         else:
-            st.success("✅ ACTION AUTHORIZED")
-            
-        st.write("📖 **Co-regulation Output:**")
-        st.info(final_output)
+            st.info(final_output)
+            st.caption(f"💎 Status: {state['auth']['status']} | Co-regulation")
+
+    st.divider()
+    st.write("🤖 **Parsed Intent (JSON):**")
+    st.json(intent)
